@@ -151,7 +151,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="data.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="select.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />

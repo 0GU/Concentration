@@ -33,8 +33,6 @@ void Data::Data_Init()
 		flag[i] == false;
 	}
 
-
-
 }
 
 Rank_Data::Rank_Data(ALL_Name _name, int* _count, int* _ranking){

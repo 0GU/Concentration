@@ -24,6 +24,13 @@ struct Point {
 	float x, y;
 };
 
+//カード用構造体
+struct Card {
+	float x = 0, y = 0;
+	int suit = 0;
+	int num = 0;
+};
+
 //プレイヤークラス
 class Data {
 private:
@@ -37,6 +44,21 @@ public:
 	Data(float _x, float _y, char* _name);
 	//初期化メソッド
 	void Data_Init();
+};
+
+//カードクラス
+class Trump {
+private:
+public:
+	Card line_card ;
+	int ID{ -1 }; //オブジェクト識別用
+	bool FandB_flag = false;
+
+	//コンストラクタ
+	Trump();
+	Trump(Card _line_card, bool _FandB);
+	//初期化メソッド
+	void Card_Init();
 };
 
 //送受信データ用のクラス

@@ -37,6 +37,7 @@ struct Rank{
 	int ranking[MAX] = {0,0,0,0};
 };
 
+//全員の名前
 struct ALL_Name{
 	char p_name[MAX][8] = { { "null" },{ "null" },{ "null" },{ "null" } };//名前
 };
@@ -59,6 +60,7 @@ public:
 	void Data_Init();
 };
 
+//ランキングクラス
 class Rank_Data {
 private:
 public:
@@ -75,4 +77,11 @@ class SendData {
 private:
 public:
 	Data data[MAX];
+};
+
+//送受信データ用のクラス
+class SendRankData {
+private:
+public:
+	Rank_Data Rdata;
 };

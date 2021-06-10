@@ -99,7 +99,7 @@ public:
 };
 
 //送受信トランプ用のクラス
-class SendSendTrump {
+class SendTrump {
 private:
 public:
 	Trump trump[52];

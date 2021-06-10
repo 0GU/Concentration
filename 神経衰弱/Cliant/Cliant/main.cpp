@@ -86,6 +86,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	};
 
+
+
+
+	
 	//送受信データ処理用
 	char StrBuf[256] = { "null" };//256バイトまで
 
@@ -109,8 +113,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		GetColor(255, 255, 255));
 	KeyInputString(0, 16, 8, name, FALSE);
 
+	bool init_flag[FLAG_MAX] = { false,false,false };
+
 	//初回送信データの作成
-	Data* my_Data = new Data(0.0f, 0.0f, name,false);
+	Data* my_Data = new Data(name,init_flag);
 
 	//初回接続処理
 	NetHandel = ConnectNetWork(IP, Port);//入力したIPと設定したポートを使用
@@ -158,6 +164,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 		else {
 			//データ受信してない場合
+			//マウスをクリックしているか判定
+			Point p{ 0,0 };
+			int Mouse = GetMouseInput();
+			if (my_Data->flag[2] == false && Mouse & MOUSE_INPUT_LEFT)
+			{
+				my_Data->flag[2] == true;
+				
+				GetMousePoint(&p.x,&p.y);
+			/*	my_Data->pos.x = (float)mou_x;
+				my_Data->pos.y = (float)mou_y;*/
+				NetWorkSend(NetHandel, &p, sizeof(Point));
+			}
 		}
 
 		ScreenFlip(); //画面更新

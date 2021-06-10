@@ -1,4 +1,5 @@
 ﻿  data.cpp
   main.cpp
   コードを生成中...
-  Server.vcxproj -> C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\x64\Debug\Server.exe
+C:\Users\澪紅\Desktop\Concentration\神経衰弱\Server\Server\data.cpp(33,11): warning C4553:  '==': 式の結果が使用されていません。'=' を意図していますか?
+  Server.vcxproj -> C:\Users\澪紅\Desktop\Concentration\神経衰弱\Server\x64\Debug\Server.exe

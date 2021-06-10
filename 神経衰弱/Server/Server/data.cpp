@@ -54,3 +54,25 @@ void Rank_Data::Rank_Data_Init() {
 		allrank.ranking[i] = 0;
 	}
 }
+
+Trump::Trump(Card _line_card, bool _FandB)
+{
+	line_card.x = _line_card.x;
+	line_card.y = _line_card.y;
+	line_card.num = _line_card.num;
+	line_card.suit = _line_card.suit;
+
+	FandB_flag = _FandB;
+}
+
+Trump::Trump() {};
+
+void Trump::Card_Init()
+{
+	line_card.x = 0;
+	line_card.y = 0;
+	line_card.num = 0;
+	line_card.suit = 0;
+
+	FandB_flag = false;
+}

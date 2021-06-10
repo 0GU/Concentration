@@ -86,6 +86,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	};
 
+	int backimg = LoadGraph("image\\トランプ素材\\ura.png");
 
 
 
@@ -95,6 +96,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	//全てのプレイヤーデータ
 	SendData* Player_ALL = new SendData();
+
+	SendTrump* Trump_ALL = new SendTrump();
 
 	//通信関係
 	IPDATA IP;
@@ -177,6 +180,45 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				NetWorkSend(NetHandel, &p, sizeof(Point));
 			}
 		}
+
+		//描画
+		for (int i = 0; i < 52; i++)
+		{
+			if (Trump_ALL->trump[i].ID == 1)
+			{
+				//トランプカード描画
+				if (Trump_ALL->trump[i].FandB_flag==true)
+				{
+					DrawGraphF(Trump_ALL->trump[i].line_card.x,
+						Trump_ALL->trump[i].line_card.y,
+						img[Trump_ALL->trump[i].line_card.suit][Trump_ALL->trump[i].line_card.num],
+						true
+					);
+				}
+				else if (Trump_ALL->trump[i].FandB_flag == false)
+				{
+					DrawGraphF(Trump_ALL->trump[i].line_card.x,
+						Trump_ALL->trump[i].line_card.y,
+						backimg, true
+					);
+				}
+			}
+		}
+
+		for (int i = 0; i < MAX; i++)
+		{
+			if (Player_ALL->data[i].ID != -1) {
+				if (Player_ALL->data[i].name == my_Data->name) {
+					DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(255, 255, 255));
+				}
+				else {
+					DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(255, 255, 255));
+
+				}
+			}
+		}
+
+
 
 		ScreenFlip(); //画面更新
 

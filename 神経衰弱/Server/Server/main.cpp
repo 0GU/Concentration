@@ -86,9 +86,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[0]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						Vec v{ 0.0f,0.0f };
+						
 						//受信データを変換
-						memcpy_s(&v, sizeof(Vec), StrBuf, sizeof(Vec));
+					
 						//送信データの更新
 						Send_Data->data[0].pos.x = p_data[0]->pos.x;
 						Send_Data->data[0].pos.y = p_data[0]->pos.y;
@@ -151,12 +151,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[1]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						Vec v{ 0.0f,0.0f };
+					
 						//受信データを変換
-						memcpy_s(&v, sizeof(Vec), StrBuf, sizeof(Vec));
+					
 						//移動処理
-						p_data[1]->pos.x += v.x;
-						p_data[1]->pos.y += v.y;
+					
 						//送信データの更新
 						Send_Data->data[1].pos.x = p_data[1]->pos.x;
 						Send_Data->data[1].pos.y = p_data[1]->pos.y;
@@ -219,12 +218,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[2]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						Vec v{ 0.0f,0.0f };
+					
 						//受信データを変換
-						memcpy_s(&v, sizeof(Vec), StrBuf, sizeof(Vec));
+					
 						//移動処理
-						p_data[2]->pos.x += v.x;
-						p_data[2]->pos.y += v.y;
+						
 						//送信データの更新
 						Send_Data->data[2].pos.x = p_data[2]->pos.x;
 						Send_Data->data[2].pos.y = p_data[2]->pos.y;
@@ -287,12 +285,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[3]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						Vec v{ 0.0f,0.0f };
+						
 						//受信データを変換
-						memcpy_s(&v, sizeof(Vec), StrBuf, sizeof(Vec));
+					
 						//移動処理
-						p_data[3]->pos.x += v.x;
-						p_data[3]->pos.y += v.y;
+					
 						//送信データの更新
 						Send_Data->data[3].pos.x = p_data[3]->pos.x;
 						Send_Data->data[3].pos.y = p_data[3]->pos.y;

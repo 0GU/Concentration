@@ -47,7 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	KeyInputString(0, 16, 8, name, FALSE);
 
 	//初回送信データの作成
-	Data* my_Data = new Data(0.0f, 0.0f, name);
+	Data* my_Data = new Data(0.0f, 0.0f, name,false);
 
 	//初回接続処理
 	NetHandel = ConnectNetWork(IP, Port);//入力したIPと設定したポートを使用

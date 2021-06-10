@@ -20,9 +20,11 @@ enum{
 	T_D,
 };
 
-//移動ベクトル
-struct Vec{
-	float x, y;
+//カード用構造体
+struct Card {
+	float x = 0, y = 0;
+	int suit = 0;
+	int num = 0;
 };
 
 //位置情報
@@ -60,6 +62,21 @@ public:
 	void Data_Init();
 };
 
+//カードクラス
+class Trump {
+private:
+public:
+	Card line_card;
+	int ID{ -1 }; //オブジェクト識別用
+	bool FandB_flag = false;
+
+	//コンストラクタ
+	Trump();
+	Trump(Card _line_card, bool _FandB);
+	//初期化メソッド
+	void Card_Init();
+};
+
 //ランキングクラス
 class Rank_Data {
 private:
@@ -79,7 +96,14 @@ public:
 	Data data[MAX];
 };
 
-//送受信データ用のクラス
+//送受信トランプ用のクラス
+class SendTrump {
+private:
+public:
+	Trump trump[52];
+};
+
+//送受信ランキングデータ用のクラス
 class SendRankData {
 private:
 public:

@@ -125,11 +125,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//初回接続処理
 			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 			{
-				p2_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
-				if (p2_NetHandle != -1)
+				if (NetHandle[0] != 0)
 				{
-					NetHandle[1] = p2_NetHandle;
-					break;
+					p2_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
+					if (p2_NetHandle != -1)
+					{
+						NetHandle[1] = p2_NetHandle;
+						break;
+					}
 				}
 			}
 
@@ -192,11 +195,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//初回接続処理
 			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 			{
-				p3_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
-				if (p3_NetHandle != -1)
+				if (NetHandle[1] != 0)
 				{
-					NetHandle[2] = p3_NetHandle;
-					break;
+					p3_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
+					if (p3_NetHandle != -1)
+					{
+						NetHandle[2] = p3_NetHandle;
+						break;
+					}
 				}
 			}
 
@@ -259,11 +265,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//初回接続処理
 			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 			{
-				p4_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
-				if (p4_NetHandle != -1)
+				if (NetHandle[2] != 0)
 				{
-					NetHandle[3] = p4_NetHandle;
-					break;
+					p4_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
+					if (p4_NetHandle != -1)
+					{
+						NetHandle[3] = p4_NetHandle;
+						break;
+					}
 				}
 			}
 
@@ -351,14 +360,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		for (int i = 0; i < MAX; i++)
 		{
 			DrawFormatString(0, i*16+32, GetColor(255, 255, 255),
-				"スレッド1 IP:%d.%d.%d.%d name=%8s x=%f:y=%f",
+				"スレッド1 IP:%d.%d.%d.%d name=%8s 枚数=%d:y=%f",
 				p_data[i]->ip.d1,
 				p_data[i]->ip.d2,
 				p_data[i]->ip.d3,
 				p_data[i]->ip.d4,
 				p_data[i]->name,
-				p_data[i]->pos.x,
-				p_data[i]->pos.y
+				p_data[i]->count,
+				p_data[i]->flag
 			);
 		}
 		

@@ -120,13 +120,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;D:\DxLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;D:\DxLib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;D:\DxLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -145,7 +145,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;D:\DxLib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

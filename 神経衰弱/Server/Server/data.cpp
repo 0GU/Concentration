@@ -2,9 +2,8 @@
 #include "main.h"
 
 //コンストラクタ
-Data::Data(float _x, float _y, char* _name,bool* _flag){
-	pos.x = _x;
-	pos.y = _y;
+Data::Data( char* _name,bool* _flag){
+
 	for (int i = 0; i < FLAG_MAX; i++)
 	{
 		flag[i] = _flag[i];
@@ -20,9 +19,6 @@ void Data::Data_Init()
 	strcpy_s(name, "null");
 
 	ip.d1 = 0; ip.d2 = 0; ip.d3 = 0; ip.d4 = 0;
-	
-	pos.x = 0.0f;
-	pos.y = 0.0f;
 
 	ID = -1;
 

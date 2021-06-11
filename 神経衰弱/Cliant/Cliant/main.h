@@ -8,8 +8,8 @@
 
 #define MAX 4//接続数
 #define FLAG_MAX 3//フラグの数
-#define WIDTH 800//windowsサイズ　横
-#define HEIGHT 600//windowaサイズ　縦
+#define WIDTH 1900//windowsサイズ　横
+#define HEIGHT 1000//windowaサイズ　縦
 
 IPDATA IP_set(); //IP入力
 
@@ -96,6 +96,12 @@ class SendData {
 private:
 public:
 	Data data[MAX];
+};
+
+class SendMyData {
+private:
+public:
+	Data data;
 };
 
 //送受信トランプ用のクラス

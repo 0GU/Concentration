@@ -122,13 +122,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalIncludeDirectories);C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;%(AdditionalIncludeDirectories);C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;D:\DxLib</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalLibraryDirectories);C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalLibraryDirectories);C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;D:\DxLib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalIncludeDirectories);C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;%(AdditionalIncludeDirectories);C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;D:\DxLib</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -147,7 +147,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalLibraryDirectories);C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\GA3\Documents\GitHub\Concentration\神経衰弱\dxlib;C:\Users\GA3\Desktop\Concentration\神経衰弱\dxlib;%(AdditionalLibraryDirectories);C:\Users\澪紅\Desktop\Concentration\神経衰弱\dxlib;D:\DxLib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

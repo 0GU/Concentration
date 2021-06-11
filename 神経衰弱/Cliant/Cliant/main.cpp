@@ -88,6 +88,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	int backimg = LoadGraph("image\\トランプ素材\\ura.png");
 
+	int Adjustimg=LoadGraph("image\\トランプ素材\\Adjustment.png");
+
 
 
 	
@@ -105,7 +107,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	int NetHandel;
 	//ポート
 	int Port = 26;
-
+	
 	//通信先のIPアドレス設定
 	IP = IP_set();
 
@@ -150,7 +152,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 		else {
 			//接続中
-			DrawString(0, 0, "接続確立中・・・", GetColor(255, 255, 255));
+			//DrawString(0, 0, "接続確立中・・・", GetColor(255, 255, 255));
+			Point p{ 0,0 };
+			int Mouse = GetMouseInput();
+			GetMousePoint(&p.x, &p.y);
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 13; j++)
+				{
+					DrawGraphF( 50 + (j * 140),100+(i*200),Adjustimg,true);
+				}
+			}
+			DrawFormatString(0, 0, GetColor(255, 255, 255),"x=%d : y=%d", p.x, p.y);
+		
 		}
 		ScreenFlip();
 	}

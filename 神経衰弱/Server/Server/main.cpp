@@ -35,7 +35,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	Data* p_data[MAX];
 	for (int i = 0; i < MAX; i++)p_data[i] = new Data();
 
+	//トランプデータ
 	Trump* All_trump[52];
+	for (int i = INITIALIZE; i < SUIT; i++)
+	{
+		for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
+		{
+			All_trump[(i * TRUMP_NUMBER) + j] = new Trump();
+		}
+	}
 
 	//送信用データ
 	SendData* Send_Data = new SendData();
@@ -88,15 +96,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[0]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						Point p{ 0,0 };
+						Point p{ INITIALIZE,INITIALIZE };
 						//受信データを変換
 						memcpy_s(&p, sizeof(Point), StrBuf, sizeof(Point));
 						//クリック判定
-						for (int i = 0; i < 52; i++)
+					/*	for (int i = 0; i < 52; i++)
 						{
 
-						}
+						}*/
+						for (int i = INITIALIZE; i < SUIT; i++)
+						{
+							for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
+							{
+								if (OFFSET_X + (j * HORIZONTAL_SPACING)<p.x&& 
+									OFFSET_X + (j * HORIZONTAL_SPACING)+TRUMP_WIDTH > p.x&&
+									OFFSET_Y + (j * VERTICAL_SPACING) < p.y &&
+									OFFSET_Y + (j * VERTICAL_SPACING) + TRUMP_HEIGHT > p.y)
+								{
 
+								}
+								
+							}
+						}
 					}
 					else
 					{

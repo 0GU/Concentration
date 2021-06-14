@@ -5,10 +5,23 @@
 #include <string>
 #include <sstream>
 
+#define INITIALIZE 0//初期化
+
 #define MAX 4//接続数
 #define FLAG_MAX 3//フラグの数
 #define WIDTH 800//windowsサイズ　横
 #define HEIGHT 600//windowaサイズ　縦
+#define OFFSET_X 50//画像表示位置補正　横
+#define OFFSET_Y 100//画像表示位置補正　縦
+#define TRUMP_WIDTH 120//トランプの画像サイズ　横
+#define TRUMP_HEIGHT 170//トランプの画像サイズ　縦
+#define HORIZONTAL_SPACING 20+TRUMP_WIDTH//トランプの横の間隔
+#define VERTICAL_SPACING 30+TRUMP_HEIGHT//トランプの縦の間隔 
+
+#define SUIT 4//トランプのスートの数
+#define TRUMP_NUMBER 13//トランプの数字の数
+
+
 	
 //IPDATA IP_set();//IP入力
 

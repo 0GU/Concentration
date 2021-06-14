@@ -92,7 +92,7 @@ public:
 
 
 //送受信データ用のクラス
-class SendData {
+class RecvData {
 private:
 public:
 	Data data[MAX];

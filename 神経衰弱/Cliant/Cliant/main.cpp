@@ -88,8 +88,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	int backimg = LoadGraph("image\\トランプ素材\\ura.png");
 
-	int Adjustimg=LoadGraph("image\\トランプ素材\\Adjustment.png");
-
 
 
 	
@@ -97,7 +95,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	char StrBuf[256] = { "null" };//256バイトまで
 
 	//全てのプレイヤーデータ
-	SendData* Player_ALL = new SendData();
+	RecvData* Player_ALL = new RecvData();
 
 	SendTrump* Trump_ALL = new SendTrump();
 
@@ -141,8 +139,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 			//受信したデータを変換
 			//受信データをメモリからStrBufにコピーして、SendDataに変換
-			NetWorkRecv(NetHandel, StrBuf, sizeof(SendData)); //コピー作業
-			memcpy_s(Player_ALL, sizeof(SendData), StrBuf, sizeof(SendData));//変換
+			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData)); //コピー作業
+			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));//変換
 
 			DrawString(0, 16, "接続完了。何かキーを押してください。", GetColor(255, 255, 255));
 
@@ -160,7 +158,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			{
 				for (int j = 0; j < 13; j++)
 				{
-					DrawGraphF( 50 + (j * 140),100+(i*200),Adjustimg,true);
+					DrawGraphF( 50 + (j * 140),100+(i*200),img[0][0],true);
 				}
 			}
 			DrawFormatString(0, 0, GetColor(255, 255, 255),"x=%d : y=%d", p.x, p.y);
@@ -175,9 +173,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		if (GetNetWorkDataLength(NetHandel) != 0) {
 			//データを受信してた場合
-			NetWorkRecv(NetHandel, StrBuf, sizeof(SendData));
+			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData));
 			//プレイヤー全体データの更新
-			memcpy_s(Player_ALL, sizeof(SendData), StrBuf, sizeof(SendData));
+			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
 		}
 		else {
 			//データ受信してない場合
@@ -196,34 +194,34 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 
 		//描画
-		for (int i = 0; i < 52; i++)
-		{
-			if (Trump_ALL->trump[i].ID == 1)
-			{
-				//トランプカード描画
-				if (Trump_ALL->trump[i].FandB_flag==true)
-				{
-					DrawGraphF(Trump_ALL->trump[i].line_card.x,
-						Trump_ALL->trump[i].line_card.y,
-						img[Trump_ALL->trump[i].line_card.suit][Trump_ALL->trump[i].line_card.num],
-						true
-					);
-				}
-				else if (Trump_ALL->trump[i].FandB_flag == false)
-				{
-					DrawGraphF(Trump_ALL->trump[i].line_card.x,
-						Trump_ALL->trump[i].line_card.y,
-						backimg, true
-					);
-				}
-			}
-		}
+		//for (int i = 0; i < 52; i++)
+		//{
+		//	if (Trump_ALL->trump[i].ID == 1)
+		//	{
+		//		//トランプカード描画
+		//		if (Trump_ALL->trump[i].FandB_flag==true)
+		//		{
+		//			DrawGraphF(Trump_ALL->trump[i].line_card.x,
+		//				Trump_ALL->trump[i].line_card.y,
+		//				img[Trump_ALL->trump[i].line_card.suit][Trump_ALL->trump[i].line_card.num],
+		//				true
+		//			);
+		//		}
+		//		else if (Trump_ALL->trump[i].FandB_flag == false)
+		//		{
+		//			DrawGraphF(Trump_ALL->trump[i].line_card.x,
+		//				Trump_ALL->trump[i].line_card.y,
+		//				backimg, true
+		//			);
+		//		}
+		//	}
+		//}
 
 		for (int i = 0; i < MAX; i++)
 		{
 			if (Player_ALL->data[i].ID != -1) {
 				if (Player_ALL->data[i].name == my_Data->name) {
-					DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(255, 255, 255));
+					DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(255, 255, 255));
 				}
 				else {
 					DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(255, 255, 255));
@@ -231,6 +229,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
+		Point pd{ 0,0 };
+		int Mouse = GetMouseInput();
+		GetMousePoint(&pd.x, &pd.y);
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 13; j++)
+			{
+				DrawGraphF(50 + (j * 140), 100 + (i * 200), img[0][0], true);
+			}
+		}
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "x=%d : y=%d", pd.x, pd.y);
 
 
 

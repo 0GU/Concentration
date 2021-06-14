@@ -35,6 +35,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	Data* p_data[MAX];
 	for (int i = 0; i < MAX; i++)p_data[i] = new Data();
 
+	Trump* All_trump[52];
+
 	//送信用データ
 	SendData* Send_Data = new SendData();
 
@@ -86,12 +88,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[0]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						
+						Point p{ 0,0 };
 						//受信データを変換
-					
-						//送信データの更新
-						Send_Data->data[0].pos.x = p_data[0]->pos.x;
-						Send_Data->data[0].pos.y = p_data[0]->pos.y;
+						memcpy_s(&p, sizeof(Point), StrBuf, sizeof(Point));
+						//クリック判定
+						for (int i = 0; i < 52; i++)
+						{
+
+						}
+
 					}
 					else
 					{
@@ -102,7 +107,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						memcpy_s(p_data[0]->name, sizeof(p_data[0]->name), StrBuf, sizeof(p_data[0]->name));
 						//送信データの更新
 						strcpy_s(Send_Data->data[0].name, sizeof(p_data[0]->name), p_data[0]->name);
-						Send_Data->data[0].pos = p_data[0]->pos;//位置
+
 						Send_Data->data[0].ip = p_data[0]->ip;//IP
 						Send_Data->data[0].ID = p_data[0]->ID;
 
@@ -160,8 +165,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						//移動処理
 					
 						//送信データの更新
-						Send_Data->data[1].pos.x = p_data[1]->pos.x;
-						Send_Data->data[1].pos.y = p_data[1]->pos.y;
+
 					}
 					else
 					{
@@ -172,7 +176,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						memcpy_s(p_data[1]->name, sizeof(p_data[1]->name), StrBuf, sizeof(p_data[1]->name));
 						//送信データの更新
 						strcpy_s(Send_Data->data[1].name, sizeof(p_data[1]->name), p_data[1]->name);
-						Send_Data->data[1].pos = p_data[1]->pos;//位置
+
 						Send_Data->data[1].ip = p_data[1]->ip;//IP
 						Send_Data->data[1].ID = p_data[1]->ID;
 
@@ -230,8 +234,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						//移動処理
 						
 						//送信データの更新
-						Send_Data->data[2].pos.x = p_data[2]->pos.x;
-						Send_Data->data[2].pos.y = p_data[2]->pos.y;
+
 					}
 					else
 					{
@@ -242,7 +245,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						memcpy_s(p_data[2]->name, sizeof(p_data[2]->name), StrBuf, sizeof(p_data[2]->name));
 						//送信データの更新
 						strcpy_s(Send_Data->data[2].name, sizeof(p_data[2]->name), p_data[2]->name);
-						Send_Data->data[2].pos = p_data[2]->pos;//位置
+
 						Send_Data->data[2].ip = p_data[2]->ip;//IP
 						Send_Data->data[2].ID = p_data[2]->ID;
 
@@ -300,8 +303,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						//移動処理
 					
 						//送信データの更新
-						Send_Data->data[3].pos.x = p_data[3]->pos.x;
-						Send_Data->data[3].pos.y = p_data[3]->pos.y;
+
 					}
 					else
 					{
@@ -312,7 +314,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						memcpy_s(p_data[3]->name, sizeof(p_data[3]->name), StrBuf, sizeof(p_data[3]->name));
 						//送信データの更新
 						strcpy_s(Send_Data->data[3].name, sizeof(p_data[3]->name), p_data[3]->name);
-						Send_Data->data[3].pos = p_data[3]->pos;//位置
 						Send_Data->data[3].ip = p_data[3]->ip;//IP
 						Send_Data->data[3].ID = p_data[3]->ID;
 

@@ -67,7 +67,7 @@ class Trump {
 private:
 public:
 	Card line_card ;
-	int ID{ -1 }; //オブジェクト識別用
+	int ID{ 10 }; //オブジェクト識別用
 	bool FandB_flag = false;
 
 	//コンストラクタ
@@ -96,6 +96,7 @@ class RecvData {
 private:
 public:
 	Data data[MAX];
+	Trump trump[52];
 };
 
 class SendMyData {
@@ -104,12 +105,12 @@ public:
 	Data data;
 };
 
-//送受信トランプ用のクラス
-class SendTrump {
-private:
-public:
-	Trump trump[52];
-};
+////送受信トランプ用のクラス
+//class SendTrump {
+//private:
+//public:
+//	Trump trump[52];
+//};
 
 
 //送受信ランキングデータ用のクラス

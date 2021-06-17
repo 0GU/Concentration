@@ -86,7 +86,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	};
 
-	int backimg = LoadGraph("image\\トランプ素材\\ura.png");
+	int backimg = LoadGraph("image\\トランプ素材\\RedBlue.png");
 
 
 
@@ -97,7 +97,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//全てのプレイヤーデータ
 	RecvData* Player_ALL = new RecvData();
 
-	SendTrump* Trump_ALL = new SendTrump();
+	//SendTrump* Trump_ALL = new SendTrump();
 
 	//通信関係
 	IPDATA IP;
@@ -158,7 +158,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			{
 				for (int j = 0; j < 13; j++)
 				{
-					DrawGraphF( 50 + (j * 140),100+(i*200),img[i][j],true);
+					DrawGraphF( 50 + (j * 140),100+(i*200),backimg,true);
 				}
 			}
 			DrawFormatString(0, 0, GetColor(255, 255, 255),"x=%d : y=%d", p.x, p.y);
@@ -194,28 +194,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 
 		//描画
-		//for (int i = 0; i < 52; i++)
-		//{
-		//	if (Trump_ALL->trump[i].ID == 1)
-		//	{
-		//		//トランプカード描画
-		//		if (Trump_ALL->trump[i].FandB_flag==true)
-		//		{
-		//			DrawGraphF(Trump_ALL->trump[i].line_card.x,
-		//				Trump_ALL->trump[i].line_card.y,
-		//				img[Trump_ALL->trump[i].line_card.suit][Trump_ALL->trump[i].line_card.num],
-		//				true
-		//			);
-		//		}
-		//		else if (Trump_ALL->trump[i].FandB_flag == false)
-		//		{
-		//			DrawGraphF(Trump_ALL->trump[i].line_card.x,
-		//				Trump_ALL->trump[i].line_card.y,
-		//				backimg, true
-		//			);
-		//		}
-		//	}
-		//}
+		for (int i = 0; i < 52; i++)
+		{
+			if (Player_ALL->trump[i].ID == 10)
+			{
+				//トランプカード描画
+				if (Player_ALL->trump[i].FandB_flag==true)
+				{
+					DrawGraphF( 50 + (Player_ALL->trump[i].line_card.x * 140),
+						100 + (Player_ALL->trump[i].line_card.y * 200),
+						img[Player_ALL->trump[i].line_card.suit][Player_ALL->trump[i].line_card.num],
+						true
+					);
+				}
+				else if (Player_ALL->trump[i].FandB_flag == false)
+				{
+					DrawGraphF(50 + (Player_ALL->trump[i].line_card.x * 140),
+						100 + (Player_ALL->trump[i].line_card.y * 200),
+						backimg, true
+					);
+				}
+			}
+		}
 
 		for (int i = 0; i < MAX; i++)
 		{

@@ -36,12 +36,43 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	for (int i = 0; i < MAX; i++)p_data[i] = new Data();
 
 	//トランプデータ
-	Trump* All_trump[52];
+	Point SetTrumpPos[MAX_TRUMP];
+	bool setposflag = false;
+	for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+	{
+		SetTrumpPos[i] = { 99,99 };
+	}
+	Trump* All_trump[MAX_TRUMP];
 	for (int i = INITIALIZE; i < SUIT; i++)
 	{
 		for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
 		{
 			All_trump[(i * TRUMP_NUMBER) + j] = new Trump();
+			All_trump[(i * TRUMP_NUMBER) + j]->line_card.num = j;
+			All_trump[(i * TRUMP_NUMBER) + j]->line_card.suit = i;
+		}
+	}
+
+	for (int i = INITIALIZE; i < SUIT; i++)
+	{
+		for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
+		{
+			do
+			{
+				setposflag = false;
+				All_trump[(i * TRUMP_NUMBER) + j]->line_card.x = GetRand(12);
+				All_trump[(i * TRUMP_NUMBER) + j]->line_card.y = GetRand(3);
+				for (int k = INITIALIZE; k < (i * TRUMP_NUMBER) + j; k++)
+				{
+					if (SetTrumpPos[k].x== All_trump[(i * TRUMP_NUMBER) + j]->line_card.x&&
+						SetTrumpPos[k].y==All_trump[(i * TRUMP_NUMBER) + j]->line_card.y)
+					{
+						setposflag = true;
+					}
+				}
+			} while (  (i * TRUMP_NUMBER) + j!=0&&setposflag==true);
+			SetTrumpPos[(i * TRUMP_NUMBER) + j].x = All_trump[(i * TRUMP_NUMBER) + j]->line_card.x;
+			SetTrumpPos[(i * TRUMP_NUMBER) + j].y = All_trump[(i * TRUMP_NUMBER) + j]->line_card.y;
 		}
 	}
 

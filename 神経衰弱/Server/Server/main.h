@@ -20,6 +20,7 @@
 
 #define SUIT 4//トランプのスートの数
 #define TRUMP_NUMBER 13//トランプの数字の数
+#define MAX_TRUMP SUIT*TRUMP_NUMBER//トランプの最大枚数
 
 
 	
@@ -79,7 +80,7 @@ class Trump {
 private:
 public:
 	Card line_card;
-	int ID{ -1 }; //オブジェクト識別用
+	int ID{ 10 }; //オブジェクト識別用
 	bool FandB_flag = false;
 
 	//コンストラクタ
@@ -106,14 +107,15 @@ class SendData {
 private:
 public:
 	Data data[MAX];
-};
-
-//送受信トランプ用のクラス
-class SendTrump {
-private:
-public:
 	Trump trump[52];
 };
+
+////送受信トランプ用のクラス
+//class SendTrump {
+//private:
+//public:
+//	
+//};
 
 //送受信ランキングデータ用のクラス
 class SendRankData {

@@ -92,7 +92,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	
 	//送受信データ処理用
-	char StrBuf[256] = { "null" };//256バイトまで
+	char StrBuf[1400] = { "null" };//256バイトまで
 
 	//全てのプレイヤーデータ
 	RecvData* Player_ALL = new RecvData();
@@ -150,19 +150,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 		else {
 			//接続中
-			//DrawString(0, 0, "接続確立中・・・", GetColor(255, 255, 255));
-			Point p{ 0,0 };
-			int Mouse = GetMouseInput();
-			GetMousePoint(&p.x, &p.y);
-			for (int i = 0; i < 4; i++)
-			{
-				for (int j = 0; j < 13; j++)
-				{
-					DrawGraphF( 50 + (j * 140),100+(i*200),backimg,true);
-				}
-			}
-			DrawFormatString(0, 0, GetColor(255, 255, 255),"x=%d : y=%d", p.x, p.y);
-		
+			DrawString(0, 0, "接続確立中・・・", GetColor(255, 255, 255));
+			
 		}
 		ScreenFlip();
 	}
@@ -176,6 +165,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData));
 			//プレイヤー全体データの更新
 			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
+			int Mouse2 = GetMouseInput();
+			if (MOUSE_INPUT_LEFT &Mouse2== 0)
+			{
+				my_Data->flag[2] = Player_ALL->data[0].flag[1];
+			}
 		}
 		else {
 			//データ受信してない場合
@@ -184,11 +178,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			int Mouse = GetMouseInput();
 			if (my_Data->flag[2] == false && Mouse & MOUSE_INPUT_LEFT)
 			{
-				my_Data->flag[2] == true;
+				my_Data->flag[2] = true;
 				
 				GetMousePoint(&p.x,&p.y);
-			/*	my_Data->pos.x = (float)mou_x;
-				my_Data->pos.y = (float)mou_y;*/
 				NetWorkSend(NetHandel, &p, sizeof(Point));
 			}
 		}
@@ -232,13 +224,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		Point pd{ 0,0 };
 		int Mouse = GetMouseInput();
 		GetMousePoint(&pd.x, &pd.y);
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 13; j++)
-			{
-				DrawGraphF(50 + (j * 140), 100 + (i * 200), img[0][0], true);
-			}
-		}
+
 		DrawFormatString(0, 0, GetColor(255, 255, 255), "x=%d : y=%d", pd.x, pd.y);
 
 

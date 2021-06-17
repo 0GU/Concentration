@@ -78,7 +78,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	//送信用データ
 	SendData* Send_Data = new SendData();
-
+	for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+	{
+		Send_Data->trump[i] = *All_trump[i];
+	}
+	
 	//ネットワーク関係
 	IPDATA IP;
 	int Port = 26;
@@ -139,16 +143,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						{
 							for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
 							{
-								if (OFFSET_X + (j * HORIZONTAL_SPACING)<p.x&& 
-									OFFSET_X + (j * HORIZONTAL_SPACING)+TRUMP_WIDTH > p.x&&
-									OFFSET_Y + (j * VERTICAL_SPACING) < p.y &&
-									OFFSET_Y + (j * VERTICAL_SPACING) + TRUMP_HEIGHT > p.y)
+								if (50 + (j * 140) < p.x &&
+									50 + (j * 140) + 120 > p.x &&
+									100 + (i * 200) < p.y &&
+									100 + (i * 200) + 170 > p.y)
 								{
-
+									for (int k = INITIALIZE; k < MAX_TRUMP; k++)
+									{
+										if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i)
+										{
+											All_trump[k]->FandB_flag = true;
+										}
+									}
 								}
-								
 							}
 						}
+						//送信データの更新
+						for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+						{
+							Send_Data->trump[i] = *All_trump[i];
+						}
+						if (Send_Data->data[0].flag[1]==true)
+						{
+							Send_Data->data[0].flag[1] = false;
+						}
+
 					}
 					else
 					{
@@ -163,6 +182,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						Send_Data->data[0].ip = p_data[0]->ip;//IP
 						Send_Data->data[0].ID = p_data[0]->ID;
 
+						
+
 						//データを送信
 						NetWorkSend(p1_NetHandle, Send_Data, sizeof(SendData));
 					}
@@ -174,206 +195,206 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//p_data[1]
 	thread* p2 = new thread([&]()
 		{
-			IPDATA ip{ 0,0,0,0 };//IPアドレス
-			int DataLength = -1;//受信データの大きさ取得用
-			int p2_NetHandle = -1;//ネットワークハンドル
-			char StrBuf[256]{ "null" };//送受信データ用
+		//	IPDATA ip{ 0,0,0,0 };//IPアドレス
+		//	int DataLength = -1;//受信データの大きさ取得用
+		//	int p2_NetHandle = -1;//ネットワークハンドル
+		//	char StrBuf[256]{ "null" };//送受信データ用
 
-			//初回接続処理
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-			{
-				if (NetHandle[0] != 0)
-				{
-					p2_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
-					if (p2_NetHandle != -1)
-					{
-						NetHandle[1] = p2_NetHandle;
-						break;
-					}
-				}
-			}
+		//	//初回接続処理
+		//	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+		//	{
+		//		if (NetHandle[0] != 0)
+		//		{
+		//			p2_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
+		//			if (p2_NetHandle != -1)
+		//			{
+		//				NetHandle[1] = p2_NetHandle;
+		//				break;
+		//			}
+		//		}
+		//	}
 
-			//サブスレッドのメインループ
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-			{
-				DataLength = GetNetWorkDataLength(p2_NetHandle);
-				if (DataLength != 0)
-				{
-					//受信データをStrBufに取得
-					NetWorkRecv(p2_NetHandle, StrBuf, DataLength);
-					//接続してきたマシンのIpアドレスを取得
-					GetNetWorkIP(p2_NetHandle, &ip);
+		//	//サブスレッドのメインループ
+		//	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+		//	{
+		//		DataLength = GetNetWorkDataLength(p2_NetHandle);
+		//		if (DataLength != 0)
+		//		{
+		//			//受信データをStrBufに取得
+		//			NetWorkRecv(p2_NetHandle, StrBuf, DataLength);
+		//			//接続してきたマシンのIpアドレスを取得
+		//			GetNetWorkIP(p2_NetHandle, &ip);
 
-					//IPアドレスから初回の接続か確認
-					if (p_data[1]->ip.d1 == ip.d1 &&
-						p_data[1]->ip.d2 == ip.d2 &&
-						p_data[1]->ip.d3 == ip.d3 &&
-						p_data[1]->ip.d4 == ip.d4)
-					{
-						//2回目以降の接続
-					
-						//受信データを変換
-					
-						//移動処理
-					
-						//送信データの更新
+		//			//IPアドレスから初回の接続か確認
+		//			if (p_data[1]->ip.d1 == ip.d1 &&
+		//				p_data[1]->ip.d2 == ip.d2 &&
+		//				p_data[1]->ip.d3 == ip.d3 &&
+		//				p_data[1]->ip.d4 == ip.d4)
+		//			{
+		//				//2回目以降の接続
+		//			
+		//				//受信データを変換
+		//			
+		//				//移動処理
+		//			
+		//				//送信データの更新
 
-					}
-					else
-					{
-						//初回の接続
-						//IPと名前を登録
-						p_data[1]->ip = ip;
-						p_data[1]->ID = 0;
-						memcpy_s(p_data[1]->name, sizeof(p_data[1]->name), StrBuf, sizeof(p_data[1]->name));
-						//送信データの更新
-						strcpy_s(Send_Data->data[1].name, sizeof(p_data[1]->name), p_data[1]->name);
+		//			}
+		//			else
+		//			{
+		//				//初回の接続
+		//				//IPと名前を登録
+		//				p_data[1]->ip = ip;
+		//				p_data[1]->ID = 0;
+		//				memcpy_s(p_data[1]->name, sizeof(p_data[1]->name), StrBuf, sizeof(p_data[1]->name));
+		//				//送信データの更新
+		//				strcpy_s(Send_Data->data[1].name, sizeof(p_data[1]->name), p_data[1]->name);
 
-						Send_Data->data[1].ip = p_data[1]->ip;//IP
-						Send_Data->data[1].ID = p_data[1]->ID;
+		//				Send_Data->data[1].ip = p_data[1]->ip;//IP
+		//				Send_Data->data[1].ID = p_data[1]->ID;
 
-						//データを送信
-						NetWorkSend(p2_NetHandle, Send_Data, sizeof(SendData));
-					}
-				}
-			}
+		//				//データを送信
+		//				NetWorkSend(p2_NetHandle, Send_Data, sizeof(SendData));
+		//			}
+		//		}
+		//	}
 		}
 	);
 
 	//p_data[2]
 	thread* p3 = new thread([&]()
 		{
-			IPDATA ip{ 0,0,0,0 };//IPアドレス
-			int DataLength = -1;//受信データの大きさ取得用
-			int p3_NetHandle = -1;//ネットワークハンドル
-			char StrBuf[256]{ "null" };//送受信データ用
+			//IPDATA ip{ 0,0,0,0 };//IPアドレス
+			//int DataLength = -1;//受信データの大きさ取得用
+			//int p3_NetHandle = -1;//ネットワークハンドル
+			//char StrBuf[256]{ "null" };//送受信データ用
 
-			//初回接続処理
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-			{
-				if (NetHandle[1] != 0)
-				{
-					p3_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
-					if (p3_NetHandle != -1)
-					{
-						NetHandle[2] = p3_NetHandle;
-						break;
-					}
-				}
-			}
+			////初回接続処理
+			//while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			//{
+			//	if (NetHandle[1] != 0)
+			//	{
+			//		p3_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
+			//		if (p3_NetHandle != -1)
+			//		{
+			//			NetHandle[2] = p3_NetHandle;
+			//			break;
+			//		}
+			//	}
+			//}
 
-			//サブスレッドのメインループ
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-			{
-				DataLength = GetNetWorkDataLength(p3_NetHandle);
-				if (DataLength != 0)
-				{
-					//受信データをStrBufに取得
-					NetWorkRecv(p3_NetHandle, StrBuf, DataLength);
-					//接続してきたマシンのIpアドレスを取得
-					GetNetWorkIP(p3_NetHandle, &ip);
+			////サブスレッドのメインループ
+			//while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			//{
+			//	DataLength = GetNetWorkDataLength(p3_NetHandle);
+			//	if (DataLength != 0)
+			//	{
+			//		//受信データをStrBufに取得
+			//		NetWorkRecv(p3_NetHandle, StrBuf, DataLength);
+			//		//接続してきたマシンのIpアドレスを取得
+			//		GetNetWorkIP(p3_NetHandle, &ip);
 
-					//IPアドレスから初回の接続か確認
-					if (p_data[2]->ip.d1 == ip.d1 &&
-						p_data[2]->ip.d2 == ip.d2 &&
-						p_data[2]->ip.d3 == ip.d3 &&
-						p_data[2]->ip.d4 == ip.d4)
-					{
-						//2回目以降の接続
-					
-						//受信データを変換
-					
-						//移動処理
-						
-						//送信データの更新
+			//		//IPアドレスから初回の接続か確認
+			//		if (p_data[2]->ip.d1 == ip.d1 &&
+			//			p_data[2]->ip.d2 == ip.d2 &&
+			//			p_data[2]->ip.d3 == ip.d3 &&
+			//			p_data[2]->ip.d4 == ip.d4)
+			//		{
+			//			//2回目以降の接続
+			//		
+			//			//受信データを変換
+			//		
+			//			//移動処理
+			//			
+			//			//送信データの更新
 
-					}
-					else
-					{
-						//初回の接続
-						//IPと名前を登録
-						p_data[2]->ip = ip;
-						p_data[2]->ID = 0;
-						memcpy_s(p_data[2]->name, sizeof(p_data[2]->name), StrBuf, sizeof(p_data[2]->name));
-						//送信データの更新
-						strcpy_s(Send_Data->data[2].name, sizeof(p_data[2]->name), p_data[2]->name);
+			//		}
+			//		else
+			//		{
+			//			//初回の接続
+			//			//IPと名前を登録
+			//			p_data[2]->ip = ip;
+			//			p_data[2]->ID = 0;
+			//			memcpy_s(p_data[2]->name, sizeof(p_data[2]->name), StrBuf, sizeof(p_data[2]->name));
+			//			//送信データの更新
+			//			strcpy_s(Send_Data->data[2].name, sizeof(p_data[2]->name), p_data[2]->name);
 
-						Send_Data->data[2].ip = p_data[2]->ip;//IP
-						Send_Data->data[2].ID = p_data[2]->ID;
+			//			Send_Data->data[2].ip = p_data[2]->ip;//IP
+			//			Send_Data->data[2].ID = p_data[2]->ID;
 
-						//データを送信
-						NetWorkSend(p3_NetHandle, Send_Data, sizeof(SendData));
-					}
-				}
-			}
+			//			//データを送信
+			//			NetWorkSend(p3_NetHandle, Send_Data, sizeof(SendData));
+			//		}
+			//	}
+			//}
 		}
 	);
 
 	//p_data[3]
 	thread* p4 = new thread([&]()
 		{
-			IPDATA ip{ 0,0,0,0 };//IPアドレス
-			int DataLength = -1;//受信データの大きさ取得用
-			int p4_NetHandle = -1;//ネットワークハンドル
-			char StrBuf[256]{ "null" };//送受信データ用
+			//IPDATA ip{ 0,0,0,0 };//IPアドレス
+			//int DataLength = -1;//受信データの大きさ取得用
+			//int p4_NetHandle = -1;//ネットワークハンドル
+			//char StrBuf[256]{ "null" };//送受信データ用
 
-			//初回接続処理
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-			{
-				if (NetHandle[2] != 0)
-				{
-					p4_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
-					if (p4_NetHandle != -1)
-					{
-						NetHandle[3] = p4_NetHandle;
-						break;
-					}
-				}
-			}
+			////初回接続処理
+			//while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			//{
+			//	if (NetHandle[2] != 0)
+			//	{
+			//		p4_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
+			//		if (p4_NetHandle != -1)
+			//		{
+			//			NetHandle[3] = p4_NetHandle;
+			//			break;
+			//		}
+			//	}
+			//}
 
-			//サブスレッドのメインループ
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-			{
-				DataLength = GetNetWorkDataLength(p4_NetHandle);
-				if (DataLength != 0)
-				{
-					//受信データをStrBufに取得
-					NetWorkRecv(p4_NetHandle, StrBuf, DataLength);
-					//接続してきたマシンのIpアドレスを取得
-					GetNetWorkIP(p4_NetHandle, &ip);
+			////サブスレッドのメインループ
+			//while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			//{
+			//	DataLength = GetNetWorkDataLength(p4_NetHandle);
+			//	if (DataLength != 0)
+			//	{
+			//		//受信データをStrBufに取得
+			//		NetWorkRecv(p4_NetHandle, StrBuf, DataLength);
+			//		//接続してきたマシンのIpアドレスを取得
+			//		GetNetWorkIP(p4_NetHandle, &ip);
 
-					//IPアドレスから初回の接続か確認
-					if (p_data[3]->ip.d1 == ip.d1 &&
-						p_data[3]->ip.d2 == ip.d2 &&
-						p_data[3]->ip.d3 == ip.d3 &&
-						p_data[3]->ip.d4 == ip.d4)
-					{
-						//2回目以降の接続
-						
-						//受信データを変換
-					
-						//移動処理
-					
-						//送信データの更新
+			//		//IPアドレスから初回の接続か確認
+			//		if (p_data[3]->ip.d1 == ip.d1 &&
+			//			p_data[3]->ip.d2 == ip.d2 &&
+			//			p_data[3]->ip.d3 == ip.d3 &&
+			//			p_data[3]->ip.d4 == ip.d4)
+			//		{
+			//			//2回目以降の接続
+			//			
+			//			//受信データを変換
+			//		
+			//			//移動処理
+			//		
+			//			//送信データの更新
 
-					}
-					else
-					{
-						//初回の接続
-						//IPと名前を登録
-						p_data[3]->ip = ip;
-						p_data[3]->ID = 0;
-						memcpy_s(p_data[3]->name, sizeof(p_data[3]->name), StrBuf, sizeof(p_data[3]->name));
-						//送信データの更新
-						strcpy_s(Send_Data->data[3].name, sizeof(p_data[3]->name), p_data[3]->name);
-						Send_Data->data[3].ip = p_data[3]->ip;//IP
-						Send_Data->data[3].ID = p_data[3]->ID;
+			//		}
+			//		else
+			//		{
+			//			//初回の接続
+			//			//IPと名前を登録
+			//			p_data[3]->ip = ip;
+			//			p_data[3]->ID = 0;
+			//			memcpy_s(p_data[3]->name, sizeof(p_data[3]->name), StrBuf, sizeof(p_data[3]->name));
+			//			//送信データの更新
+			//			strcpy_s(Send_Data->data[3].name, sizeof(p_data[3]->name), p_data[3]->name);
+			//			Send_Data->data[3].ip = p_data[3]->ip;//IP
+			//			Send_Data->data[3].ID = p_data[3]->ID;
 
-						//データを送信
-						NetWorkSend(p4_NetHandle, Send_Data, sizeof(SendData));
-					}
-				}
-			}
+			//			//データを送信
+			//			NetWorkSend(p4_NetHandle, Send_Data, sizeof(SendData));
+			//		}
+			//	}
+			//}
 		}
 	);
 

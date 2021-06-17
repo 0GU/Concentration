@@ -1,10 +1,3 @@
-﻿  data.cpp
-  main.cpp
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\Cliant\main.cpp(161,36): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\Cliant\main.cpp(161,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\Cliant\main.cpp(187,22): warning C4553: '==': 式の結果が使用されていません。'=' を意図していますか?
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\Cliant\main.cpp(239,36): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\Cliant\main.cpp(239,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  select.cpp
-  コードを生成中...
+﻿  main.cpp
+C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\Cliant\main.cpp(169,36): warning C4554: '&': 演算子の優先順位に問題があります。かっこを使用して優先順位を明確にしてください
   Cliant.vcxproj -> C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\x64\Debug\Cliant.exe

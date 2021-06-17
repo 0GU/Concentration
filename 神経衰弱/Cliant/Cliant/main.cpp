@@ -158,7 +158,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			{
 				for (int j = 0; j < 13; j++)
 				{
-					DrawGraphF( 50 + (j * 140),100+(i*200),img[0][0],true);
+					DrawGraphF( 50 + (j * 140),100+(i*200),img[i][j],true);
 				}
 			}
 			DrawFormatString(0, 0, GetColor(255, 255, 255),"x=%d : y=%d", p.x, p.y);

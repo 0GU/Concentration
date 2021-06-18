@@ -52,7 +52,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			All_trump[(i * TRUMP_NUMBER) + j]->line_card.suit = i;
 		}
 	}
-
+	//各トランプの座標決定
 	for (int i = INITIALIZE; i < SUIT; i++)
 	{
 		for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
@@ -87,6 +87,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	IPDATA IP;
 	int Port = 26;
 	int NetHandle[4] = { 0 };
+
+	//トランプチェック用変数
+	int Check_count=0;
+	int Save_Trump[2] = { 0,0 };
 
 	///////////
 
@@ -150,9 +154,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 								{
 									for (int k = INITIALIZE; k < MAX_TRUMP; k++)
 									{
-										if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i)
+										if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i&& All_trump[k]->ID==10)
 										{
 											All_trump[k]->FandB_flag = true;
+											Save_Trump[Check_count] = k;
+											Check_count += 1;
 										}
 									}
 								}
@@ -163,9 +169,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						{
 							Send_Data->trump[i] = *All_trump[i];
 						}
-						if (Send_Data->data[0].flag[1]==true)
+				
+
+						if (Check_count==2)
 						{
-							Send_Data->data[0].flag[1] = false;
+							if (All_trump[Save_Trump[0]]->line_card.num == All_trump[Save_Trump[1]]->line_card.num)
+							{
+								All_trump[Save_Trump[0]]->ID = 99;
+								All_trump[Save_Trump[1]]->ID = 99;
+								Send_Data->data[0].count += 2;
+							}
+							else
+							{
+								All_trump[Save_Trump[0]]->FandB_flag = false;
+								All_trump[Save_Trump[1]]->FandB_flag = false;
+							}
+							Check_count = 0;
 						}
 
 					}
@@ -408,6 +427,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		//切断状況をチェック
 		int LostHandle = GetLostNetWork();
 
+		if (Send_Data->data[0].flag[1] == true && Check_count != 2)
+		{
+			Send_Data->data[0].flag[1] = false;
+		}
 
 		for (int i = 0; i < MAX; i++) {
 			//データを送信する

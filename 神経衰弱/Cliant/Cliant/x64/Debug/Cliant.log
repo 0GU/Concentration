@@ -1,3 +1,2 @@
 ﻿  main.cpp
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\Cliant\main.cpp(169,36): warning C4554: '&': 演算子の優先順位に問題があります。かっこを使用して優先順位を明確にしてください
   Cliant.vcxproj -> C:\Users\GA3\Desktop\Concentration\神経衰弱\Cliant\x64\Debug\Cliant.exe

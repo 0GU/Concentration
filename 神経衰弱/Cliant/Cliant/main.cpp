@@ -166,7 +166,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//プレイヤー全体データの更新
 			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
 			int Mouse2 = GetMouseInput();
-			if (MOUSE_INPUT_LEFT &Mouse2== 0)
+			if ((MOUSE_INPUT_LEFT &Mouse2)== 0)
 			{
 				my_Data->flag[2] = Player_ALL->data[0].flag[1];
 			}

@@ -6,11 +6,39 @@
 #include <sstream>
 #include <Windows.h>
 
-#define MAX 4//接続数
-#define FLAG_MAX 3//フラグの数
-#define WIDTH 1900//windowsサイズ　横
-#define HEIGHT 1000//windowaサイズ　縦
-#define WHITE 255,255,255
+#define INITIALIZE 0                      //初期化
+#define MAX 4                             //接続数
+#define FLAG_MAX 3                        //フラグの数
+#define WIDTH 1900                        //windowsサイズ　横
+#define HEIGHT 1000                       //windowaサイズ　縦
+#define WHITE 255,255,255                 //文字の色：白
+#define RED 255,0,0                       //文字の色；赤
+#define GREEN 0,255,0                     //文字の色：緑
+#define BLUE 0,0,255                      //文字の色：青
+#define CONNECTION_POS_X 0                //接続確立文字X軸
+#define CONNECTION_POS_Y 0                //接続確立文字Y軸
+#define CONNECTION_CMP_POS_X 0            //接続完了文字X軸
+#define CONNECTION_CMP_POS_Y 16           //接続完了文字Y軸
+#define TRUMP_WIDTH 120                   //カードの縦の長さ
+#define TRUMP_HEIGHT 170                  //カードの横の長さ
+#define HORIZONTAL_SPACING (20 + TRUMP_WIDTH) //トランプの横の間隔
+#define VERTICAL_SPACING (30 + TRUMP_HEIGHT) //トランプの縦の間隔
+#define OFFSET_X 50                       //画面表示位置補正X軸
+#define OFFSET_Y 100                      //画面表示位置補正Y軸
+#define NAME_INPUT_POS_X 0                //名前表示位置X軸
+#define NAME_INPUT_POS_Y 0                //名前表示位置Y軸
+#define IP_INPUT_POS_X 0                  //IP入力文字表示位置X軸
+#define IP_INPUT_POS_Y 0                  //IP入力文字表示位置Y軸
+#define IP_POS_X 0                        //IP表示位置X軸
+#define IP_POS_Y 16                       //IP表示位置Y軸
+#define IP_CONFIRMATION_POS_X 0           //確認文字表示位置X軸
+#define IP_CONFIRMATION_POS_Y 32          //確認文字表示位置Y軸
+#define IP_ANSWER_POS_X 0                 //解答文字表示位置X軸
+#define IP_ANSWER_POS_Y 48                //解答文字表示位置Y軸
+
+#define SUIT 4                            //トランプのスートの数
+#define TRUMP_NUMBER 13                   //トランプの数字の数
+#define TRUMP_MAX (SUIT*TRUMP_NUMBER)     //トランプの合計枚数
 
 IPDATA IP_set(); //IP入力
 
@@ -29,9 +57,9 @@ struct Point {
 
 //カード用構造体
 struct Card {
-	float x = 0, y = 0;
-	int suit = 0;
-	int num = 0;
+	float x = INITIALIZE, y = INITIALIZE;
+	int suit = INITIALIZE;
+	int num = INITIALIZE;
 };
 
 //順位確認
@@ -51,7 +79,7 @@ class Data {
 private:
 public:
 	char name[8] = { "null" };//名前
-	int count = 0;
+	int count = INITIALIZE;
 	int ID{ -1 };//オブジェクト識別用
 	IPDATA ip{ 0,0,0,0 };//IPアドレス保存用
 	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用

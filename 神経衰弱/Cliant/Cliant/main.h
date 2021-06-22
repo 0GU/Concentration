@@ -10,6 +10,7 @@
 #define FLAG_MAX 3//フラグの数
 #define WIDTH 1900//windowsサイズ　横
 #define HEIGHT 1000//windowaサイズ　縦
+#define WHITE 255,255,255
 
 IPDATA IP_set(); //IP入力
 

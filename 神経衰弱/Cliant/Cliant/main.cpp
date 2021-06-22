@@ -113,7 +113,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	char name[8] = " null ";
 	ClearDrawScreen();//画面クリア
 	DrawString(0, 0, "名前を入力　小文字8文字/全角4文字まで",
-		GetColor(255, 255, 255));
+		GetColor(WHITE));
 	KeyInputString(0, 16, 8, name, FALSE);
 
 	bool init_flag[FLAG_MAX] = { false,false,false };

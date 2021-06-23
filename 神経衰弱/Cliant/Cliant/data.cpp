@@ -4,7 +4,7 @@
 //コンストラクタ
 Data::Data(char* _name, bool* _flag) {
 
-	for (int i = 0; i < FLAG_MAX; i++)
+	for (int i = INITIALIZE; i < FLAG_MAX; i++)
 	{
 		flag[i] = _flag[i];
 	}
@@ -18,13 +18,13 @@ void Data::Data_Init()
 {
 	strcpy_s(name, "null");
 
-	ip.d1 = 0; ip.d2 = 0; ip.d3 = 0; ip.d4 = 0;
+	ip.d1 = INITIALIZE; ip.d2 = INITIALIZE; ip.d3 = INITIALIZE; ip.d4 = INITIALIZE;
 
 	ID = -1;
 
-	count = 0;
+	count = INITIALIZE;
 
-	for (int i = 0; i < FLAG_MAX; i++)
+	for (int i = INITIALIZE; i < FLAG_MAX; i++)
 	{
 		flag[i] = false;
 	}
@@ -32,7 +32,7 @@ void Data::Data_Init()
 }
 
 Rank_Data::Rank_Data(ALL_Name _name, int* _count, int* _ranking) {
-	for (int i = 0; i < MAX; i++)
+	for (int i = INITIALIZE; i < MAX; i++)
 	{
 		allrank.count[i] = _count[i];
 		strcpy_s(allrank.name[i], _name.p_name[i]);
@@ -43,11 +43,11 @@ Rank_Data::Rank_Data(ALL_Name _name, int* _count, int* _ranking) {
 Rank_Data::Rank_Data() {};
 
 void Rank_Data::Rank_Data_Init() {
-	for (int i = 0; i < MAX; i++)
+	for (int i = INITIALIZE; i < MAX; i++)
 	{
-		allrank.count[i] = 0;
+		allrank.count[i] = INITIALIZE;
 		strcpy_s(allrank.name[i], "null");
-		allrank.ranking[i] = 0;
+		allrank.ranking[i] = INITIALIZE;
 	}
 }
 
@@ -65,10 +65,10 @@ Trump::Trump() {};
 
 void Trump::Card_Init()
 {
-	line_card.x = 0;
-	line_card.y = 0;
-	line_card.num = 0;
-	line_card.suit = 0;
+	line_card.x = INITIALIZE;
+	line_card.y = INITIALIZE;
+	line_card.num = INITIALIZE;
+	line_card.suit = INITIALIZE;
 
 	FandB_flag = false;
 }

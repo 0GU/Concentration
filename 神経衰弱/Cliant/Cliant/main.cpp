@@ -22,7 +22,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	SetWindowText("神経衰弱");
 
 	//画像読み込み
-	int img[4][13] = {
+	int img[SUIT][TRUMP_NUMBER] = {
 		{
 		   LoadGraph("image\\トランプ素材\\clover\\clover1.png"),
 		   LoadGraph("image\\トランプ素材\\clover\\clover2.png"),
@@ -110,11 +110,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	IP = IP_set();
 
 	//名前の入力
-	char name[8] = " null ";
+	char name[NAME_INPUT_MAX] = " null ";
 	ClearDrawScreen();//画面クリア
-	DrawString(0, 0, "名前を入力　小文字8文字/全角4文字まで",
+	DrawString(NAME_INPUT_POS_X, NAME_INPUT_POS_Y, "名前を入力　小文字8文字/全角4文字まで",
 		GetColor(WHITE));
-	KeyInputString(0, 16, 8, name, FALSE);
+	KeyInputString(NAME_INPUT_ANSWER_POS_X, NAME_INPUT_ANSWER_POS_Y, NAME_INPUT_MAX, name, FALSE);
 
 	bool init_flag[FLAG_MAX] = { false,false,false };
 
@@ -142,7 +142,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData)); //コピー作業
 			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));//変換
 
-			DrawString(0, 16, "接続完了。何かキーを押してください。", GetColor(255, 255, 255));
+			DrawString(CONNECTION_CMP_POS_X, CONNECTION_CMP_POS_Y, "接続完了。何かキーを押してください。", GetColor(WHITE));
 
 			ScreenFlip();
 			WaitKey();
@@ -150,7 +150,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 		else {
 			//接続中
-			DrawString(0, 0, "接続確立中・・・", GetColor(255, 255, 255));
+			DrawString(CONNECTION_POS_X, CONNECTION_POS_Y, "接続確立中・・・", GetColor(WHITE));
 			
 		}
 		ScreenFlip();
@@ -174,7 +174,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		else {
 			//データ受信してない場合
 			//マウスをクリックしているか判定
-			Point p{ 0,0 };
+			Point p{ INITIALIZE,INITIALIZE };
 			int Mouse = GetMouseInput();
 			if (my_Data->flag[2] == false && Mouse & MOUSE_INPUT_LEFT)
 			{
@@ -186,46 +186,46 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 
 		//描画
-		for (int i = 0; i < 52; i++)
+		for (int i = INITIALIZE; i < TRUMP_MAX; i++)
 		{
 			if (Player_ALL->trump[i].ID == 10)
 			{
 				//トランプカード描画
 				if (Player_ALL->trump[i].FandB_flag==true)
 				{
-					DrawGraphF( 50 + (Player_ALL->trump[i].line_card.x * 140),
-						100 + (Player_ALL->trump[i].line_card.y * 200),
+					DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
+						OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
 						img[Player_ALL->trump[i].line_card.suit][Player_ALL->trump[i].line_card.num],
 						true
 					);
 				}
 				else if (Player_ALL->trump[i].FandB_flag == false)
 				{
-					DrawGraphF(50 + (Player_ALL->trump[i].line_card.x * 140),
-						100 + (Player_ALL->trump[i].line_card.y * 200),
+					DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
+						OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
 						backimg, true
 					);
 				}
 			}
 		}
 
-		for (int i = 0; i < MAX; i++)
+		for (int i = INITIALIZE; i < MAX; i++)
 		{
 			if (Player_ALL->data[i].ID != -1) {
 				if (Player_ALL->data[i].name == my_Data->name) {
-					DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(255, 255, 255));
+					DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(WHITE));
 				}
 				else {
-					DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(255, 255, 255));
+					DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(WHITE));
 
 				}
 			}
 		}
-		Point pd{ 0,0 };
+		Point pd{ INITIALIZE,INITIALIZE };
 		int Mouse = GetMouseInput();
 		GetMousePoint(&pd.x, &pd.y);
 
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "x=%d : y=%d", pd.x, pd.y);
+		DrawFormatString(0, 0, GetColor(WHITE), "x=%d : y=%d", pd.x, pd.y);
 
 
 

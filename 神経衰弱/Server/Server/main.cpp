@@ -82,6 +82,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	{
 		Send_Data->trump[i] = *All_trump[i];
 	}
+
+	//受信用データ
+	RecvData* Recv_Data[MAX];
+	for (int i = 0; i < MAX; i++)
+	{
+		Recv_Data[i] = new RecvData();
+	}
 	
 	//ネットワーク関係
 	IPDATA IP;
@@ -92,6 +99,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	int Check_count=0;
 	int Save_Trump[2] = { 0,0 };
 
+	//ゲーム開始用フラグ
+	bool GameStart_flag = false;
 	///////////
 
 	//接続待機状態にする
@@ -135,30 +144,35 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[0]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						Point p{ INITIALIZE,INITIALIZE };
+						
 						//受信データを変換
-						memcpy_s(&p, sizeof(Point), StrBuf, sizeof(Point));
+						memcpy_s(Recv_Data[0], sizeof(RecvData), StrBuf, sizeof(RecvData));
+						p_data[0]->flag[0] = Recv_Data[0]->turn_flag;
+						p_data[0]->flag[2] = Recv_Data[0]->Ready_flag;
 						//クリック判定
 					/*	for (int i = 0; i < 52; i++)
 						{
 
 						}*/
-						for (int i = INITIALIZE; i < SUIT; i++)
+						if (p_data[0]->flag[0] == true)
 						{
-							for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
+							for (int i = INITIALIZE; i < SUIT; i++)
 							{
-								if (50 + (j * 140) < p.x &&
-									50 + (j * 140) + 120 > p.x &&
-									100 + (i * 200) < p.y &&
-									100 + (i * 200) + 170 > p.y)
+								for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
 								{
-									for (int k = INITIALIZE; k < MAX_TRUMP; k++)
+									if (50 + (j * 140) < Recv_Data[0]->pos.x &&
+										50 + (j * 140) + 120 > Recv_Data[0]->pos.x &&
+										100 + (i * 200) < Recv_Data[0]->pos.y &&
+										100 + (i * 200) + 170 > Recv_Data[0]->pos.y)
 									{
-										if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i&& All_trump[k]->ID==10)
+										for (int k = INITIALIZE; k < MAX_TRUMP; k++)
 										{
-											All_trump[k]->FandB_flag = true;
-											Save_Trump[Check_count] = k;
-											Check_count += 1;
+											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10)
+											{
+												All_trump[k]->FandB_flag = true;
+												Save_Trump[Check_count] = k;
+												Check_count += 1;
+											}
 										}
 									}
 								}
@@ -183,6 +197,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 							{
 								All_trump[Save_Trump[0]]->FandB_flag = false;
 								All_trump[Save_Trump[1]]->FandB_flag = false;
+								p_data[0]->flag[0] = false;
+								
 							}
 							Check_count = 0;
 						}
@@ -200,6 +216,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 						Send_Data->data[0].ip = p_data[0]->ip;//IP
 						Send_Data->data[0].ID = p_data[0]->ID;
+						Send_Data->data[0].flag[0] = p_data[0]->flag[0];
 
 						
 
@@ -427,10 +444,60 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		//切断状況をチェック
 		int LostHandle = GetLostNetWork();
 
-		if (Send_Data->data[0].flag[1] == true && Check_count != 2)
+
+
+	}
+	int Mouse = GetMouseInput();
+
+	if (Mouse & MOUSE_INPUT_LEFT)
+	{
+		p_data[0]->flag[0] = true;
+	}
+
+		if (GameStart_flag == false)
 		{
-			Send_Data->data[0].flag[1] = false;
+			for (int i = INITIALIZE; i < MAX; i++) {
+				//準備確認
+				if (NetHandle[i] != -1) {
+					if (p_data[i]->flag[2] == false)
+					{
+						break;
+					}
+				}
+				if (i == MAX - 1)
+				{
+					//プレイヤーの順番を決める処理
+					/*
+
+					*/
+
+					GameStart_flag = true;
+					p_data[0]->flag[0] = true;
+				}
+			}
 		}
+		if (GameStart_flag==true)
+		{
+			//ターン移行処理
+			/*if ()
+			{
+
+			}
+			*/
+			//クリックフラグをfalseにする
+			if (Send_Data->data[0].flag[1] == true && Check_count != 2)
+			{
+				Send_Data->data[0].flag[1] = false;
+			}
+
+			for (int i = INITIALIZE; i < MAX; i++)
+			{
+				if (NetHandle[i] != -1) {
+					Send_Data->data[i].flag[0] = p_data[i]->flag[0];
+				}
+			}
+		
+	
 
 		for (int i = 0; i < MAX; i++) {
 			//データを送信する

@@ -4,7 +4,7 @@
 //コンストラクタ
 Data::Data(char* _name, bool* _flag) {
 
-	for (int i = 0; i < FLAG_MAX; i++)
+	for (int i = INITIALIZE; i < FLAG_MAX; i++)
 	{
 		flag[i] = _flag[i];
 	}

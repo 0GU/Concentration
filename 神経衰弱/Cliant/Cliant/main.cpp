@@ -22,7 +22,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	SetWindowText("神経衰弱");
 
 	//画像読み込み
-	int img[4][13] = {
+	int img[SUIT][TRUMP_NUMBER] = {
 		{
 		   LoadGraph("image\\トランプ素材\\clover\\clover1.png"),
 		   LoadGraph("image\\トランプ素材\\clover\\clover2.png"),
@@ -110,11 +110,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	IP = IP_set();
 
 	//名前の入力
-	char name[8] = " null ";
+	char name[NAME_INPUT_MAX] = " null ";
 	ClearDrawScreen();//画面クリア
 	DrawString(NAME_INPUT_POS_X, NAME_INPUT_POS_Y, "名前を入力　小文字8文字/全角4文字まで",
 		GetColor(WHITE));
-	KeyInputString(0, 16, 8, name, FALSE);
+	KeyInputString(NAME_INPUT_ANSWER_POS_X, NAME_INPUT_ANSWER_POS_Y, NAME_INPUT_MAX, name, FALSE);
 
 	bool init_flag[FLAG_MAX] = { false,false,false };
 
@@ -174,7 +174,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		else {
 			//データ受信してない場合
 			//マウスをクリックしているか判定
-			Point p{ 0,0 };
+			Point p{ INITIALIZE,INITIALIZE };
 			int Mouse = GetMouseInput();
 			if (my_Data->flag[2] == false && Mouse & MOUSE_INPUT_LEFT)
 			{
@@ -221,7 +221,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
-		Point pd{ 0,0 };
+		Point pd{ INITIALIZE,INITIALIZE };
 		int Mouse = GetMouseInput();
 		GetMousePoint(&pd.x, &pd.y);
 

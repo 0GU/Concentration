@@ -137,6 +137,14 @@ public:
 	Trump trump[52];
 };
 
+class SendData {
+private:
+public:
+	Point pos;
+	bool Ready_flag;
+	bool turn_flag;
+};
+
 class SendMyData {
 private:
 public:

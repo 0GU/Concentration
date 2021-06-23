@@ -97,6 +97,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//全てのプレイヤーデータ
 	RecvData* Player_ALL = new RecvData();
 
+	//送信データ用のクラス
+	SendData* Send_Data = new SendData();
+
 	//SendTrump* Trump_ALL = new SendTrump();
 
 	//通信関係
@@ -165,10 +168,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData));
 			//プレイヤー全体データの更新
 			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
+			my_Data->flag[0] = Player_ALL->data[0].flag[0];
+			
 			int Mouse2 = GetMouseInput();
 			if ((MOUSE_INPUT_LEFT &Mouse2)== 0)
 			{
-				my_Data->flag[2] = Player_ALL->data[0].flag[1];
+				my_Data->flag[1] = Player_ALL->data[0].flag[1];
+			}
+		}
+		else if (my_Data->flag[2] ==false)
+		{
+			if (CheckHitKey(KEY_INPUT_S))
+			{
+				my_Data->flag[2] = true;
+				Send_Data->Ready_flag = my_Data->flag[2];
+				NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
 			}
 		}
 		else {
@@ -176,51 +190,63 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//マウスをクリックしているか判定
 			Point p{ INITIALIZE,INITIALIZE };
 			int Mouse = GetMouseInput();
-			if (my_Data->flag[2] == false && Mouse & MOUSE_INPUT_LEFT)
+			if (my_Data->flag[1] == false && Mouse & MOUSE_INPUT_LEFT)
 			{
-				my_Data->flag[2] = true;
+				my_Data->flag[1] = true;
+				Send_Data->turn_flag = my_Data->flag[0];
 				
 				GetMousePoint(&p.x,&p.y);
-				NetWorkSend(NetHandel, &p, sizeof(Point));
+				Send_Data->pos = p;
+				NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
 			}
 		}
 
 		//描画
-		for (int i = INITIALIZE; i < TRUMP_MAX; i++)
+		if (my_Data->flag[2] == false)
 		{
-			if (Player_ALL->trump[i].ID == 10)
+			DrawStringF(0, 0, "待機中", GetColor(WHITE));
+		}
+		else
+		{
+			for (int i = INITIALIZE; i < TRUMP_MAX; i++)
 			{
-				//トランプカード描画
-				if (Player_ALL->trump[i].FandB_flag==true)
+				if (Player_ALL->trump[i].ID == 10)
 				{
-					DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
-						OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
-						img[Player_ALL->trump[i].line_card.suit][Player_ALL->trump[i].line_card.num],
-						true
-					);
+					//トランプカード描画
+					if (Player_ALL->trump[i].FandB_flag == true)
+					{
+						DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
+							OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
+							img[Player_ALL->trump[i].line_card.suit][Player_ALL->trump[i].line_card.num],
+							true
+						);
+					}
+					else if (Player_ALL->trump[i].FandB_flag == false)
+					{
+						DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
+							OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
+							backimg, true
+						);
+					}
 				}
-				else if (Player_ALL->trump[i].FandB_flag == false)
-				{
-					DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
-						OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
-						backimg, true
-					);
+			}
+
+			for (int i = INITIALIZE; i < MAX; i++)
+			{
+				if (Player_ALL->data[i].ID != -1) {
+					if (Player_ALL->data[i].name == my_Data->name) {
+						DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(WHITE));
+					}
+					else {
+						DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(WHITE));
+
+					}
 				}
 			}
 		}
+		
 
-		for (int i = INITIALIZE; i < MAX; i++)
-		{
-			if (Player_ALL->data[i].ID != -1) {
-				if (Player_ALL->data[i].name == my_Data->name) {
-					DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(WHITE));
-				}
-				else {
-					DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(WHITE));
-
-				}
-			}
-		}
+		
 		Point pd{ INITIALIZE,INITIALIZE };
 		int Mouse = GetMouseInput();
 		GetMousePoint(&pd.x, &pd.y);

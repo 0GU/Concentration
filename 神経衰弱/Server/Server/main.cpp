@@ -64,13 +64,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				All_trump[(i * TRUMP_NUMBER) + j]->line_card.y = GetRand(3);
 				for (int k = INITIALIZE; k < (i * TRUMP_NUMBER) + j; k++)
 				{
-					if (SetTrumpPos[k].x== All_trump[(i * TRUMP_NUMBER) + j]->line_card.x&&
-						SetTrumpPos[k].y==All_trump[(i * TRUMP_NUMBER) + j]->line_card.y)
+					if (SetTrumpPos[k].x == All_trump[(i * TRUMP_NUMBER) + j]->line_card.x &&
+						SetTrumpPos[k].y == All_trump[(i * TRUMP_NUMBER) + j]->line_card.y)
 					{
 						setposflag = true;
 					}
 				}
-			} while (  (i * TRUMP_NUMBER) + j!=0&&setposflag==true);
+			} while ((i * TRUMP_NUMBER) + j != 0 && setposflag == true);
 			SetTrumpPos[(i * TRUMP_NUMBER) + j].x = All_trump[(i * TRUMP_NUMBER) + j]->line_card.x;
 			SetTrumpPos[(i * TRUMP_NUMBER) + j].y = All_trump[(i * TRUMP_NUMBER) + j]->line_card.y;
 		}
@@ -89,18 +89,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	{
 		Recv_Data[i] = new RecvData();
 	}
-	
+
 	//ネットワーク関係
 	IPDATA IP;
 	int Port = 26;
 	int NetHandle[4] = { 0 };
 
 	//トランプチェック用変数
-	int Check_count=0;
+	int Check_count = 0;
 	int Save_Trump[2] = { 0,0 };
 
 	//ゲーム開始用フラグ
 	bool GameStart_flag = false;
+	bool player_check = false;
 	///////////
 
 	//接続待機状態にする
@@ -144,7 +145,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[0]->ip.d4 == ip.d4)
 					{
 						//2回目以降の接続
-						
+
 						//受信データを変換
 						memcpy_s(Recv_Data[0], sizeof(RecvData), StrBuf, sizeof(RecvData));
 						p_data[0]->flag[0] = Recv_Data[0]->turn_flag;
@@ -167,7 +168,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 									{
 										for (int k = INITIALIZE; k < MAX_TRUMP; k++)
 										{
-											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10)
+											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10&& All_trump[k]->FandB_flag==false)
 											{
 												All_trump[k]->FandB_flag = true;
 												Save_Trump[Check_count] = k;
@@ -183,9 +184,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						{
 							Send_Data->trump[i] = *All_trump[i];
 						}
-				
 
-						if (Check_count==2)
+
+						if (Check_count == 2)
 						{
 							if (All_trump[Save_Trump[0]]->line_card.num == All_trump[Save_Trump[1]]->line_card.num)
 							{
@@ -198,7 +199,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 								All_trump[Save_Trump[0]]->FandB_flag = false;
 								All_trump[Save_Trump[1]]->FandB_flag = false;
 								p_data[0]->flag[0] = false;
-								
+
 							}
 							Check_count = 0;
 						}
@@ -218,7 +219,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						Send_Data->data[0].ID = p_data[0]->ID;
 						Send_Data->data[0].flag[0] = p_data[0]->flag[0];
 
-						
+
 
 						//データを送信
 						NetWorkSend(p1_NetHandle, Send_Data, sizeof(SendData));
@@ -231,69 +232,69 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//p_data[1]
 	thread* p2 = new thread([&]()
 		{
-		//	IPDATA ip{ 0,0,0,0 };//IPアドレス
-		//	int DataLength = -1;//受信データの大きさ取得用
-		//	int p2_NetHandle = -1;//ネットワークハンドル
-		//	char StrBuf[256]{ "null" };//送受信データ用
+			//	IPDATA ip{ 0,0,0,0 };//IPアドレス
+			//	int DataLength = -1;//受信データの大きさ取得用
+			//	int p2_NetHandle = -1;//ネットワークハンドル
+			//	char StrBuf[256]{ "null" };//送受信データ用
 
-		//	//初回接続処理
-		//	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-		//	{
-		//		if (NetHandle[0] != 0)
-		//		{
-		//			p2_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
-		//			if (p2_NetHandle != -1)
-		//			{
-		//				NetHandle[1] = p2_NetHandle;
-		//				break;
-		//			}
-		//		}
-		//	}
+			//	//初回接続処理
+			//	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			//	{
+			//		if (NetHandle[0] != 0)
+			//		{
+			//			p2_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
+			//			if (p2_NetHandle != -1)
+			//			{
+			//				NetHandle[1] = p2_NetHandle;
+			//				break;
+			//			}
+			//		}
+			//	}
 
-		//	//サブスレッドのメインループ
-		//	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
-		//	{
-		//		DataLength = GetNetWorkDataLength(p2_NetHandle);
-		//		if (DataLength != 0)
-		//		{
-		//			//受信データをStrBufに取得
-		//			NetWorkRecv(p2_NetHandle, StrBuf, DataLength);
-		//			//接続してきたマシンのIpアドレスを取得
-		//			GetNetWorkIP(p2_NetHandle, &ip);
+			//	//サブスレッドのメインループ
+			//	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			//	{
+			//		DataLength = GetNetWorkDataLength(p2_NetHandle);
+			//		if (DataLength != 0)
+			//		{
+			//			//受信データをStrBufに取得
+			//			NetWorkRecv(p2_NetHandle, StrBuf, DataLength);
+			//			//接続してきたマシンのIpアドレスを取得
+			//			GetNetWorkIP(p2_NetHandle, &ip);
 
-		//			//IPアドレスから初回の接続か確認
-		//			if (p_data[1]->ip.d1 == ip.d1 &&
-		//				p_data[1]->ip.d2 == ip.d2 &&
-		//				p_data[1]->ip.d3 == ip.d3 &&
-		//				p_data[1]->ip.d4 == ip.d4)
-		//			{
-		//				//2回目以降の接続
-		//			
-		//				//受信データを変換
-		//			
-		//				//移動処理
-		//			
-		//				//送信データの更新
+			//			//IPアドレスから初回の接続か確認
+			//			if (p_data[1]->ip.d1 == ip.d1 &&
+			//				p_data[1]->ip.d2 == ip.d2 &&
+			//				p_data[1]->ip.d3 == ip.d3 &&
+			//				p_data[1]->ip.d4 == ip.d4)
+			//			{
+			//				//2回目以降の接続
+			//			
+			//				//受信データを変換
+			//			
+			//				//移動処理
+			//			
+			//				//送信データの更新
 
-		//			}
-		//			else
-		//			{
-		//				//初回の接続
-		//				//IPと名前を登録
-		//				p_data[1]->ip = ip;
-		//				p_data[1]->ID = 0;
-		//				memcpy_s(p_data[1]->name, sizeof(p_data[1]->name), StrBuf, sizeof(p_data[1]->name));
-		//				//送信データの更新
-		//				strcpy_s(Send_Data->data[1].name, sizeof(p_data[1]->name), p_data[1]->name);
+			//			}
+			//			else
+			//			{
+			//				//初回の接続
+			//				//IPと名前を登録
+			//				p_data[1]->ip = ip;
+			//				p_data[1]->ID = 0;
+			//				memcpy_s(p_data[1]->name, sizeof(p_data[1]->name), StrBuf, sizeof(p_data[1]->name));
+			//				//送信データの更新
+			//				strcpy_s(Send_Data->data[1].name, sizeof(p_data[1]->name), p_data[1]->name);
 
-		//				Send_Data->data[1].ip = p_data[1]->ip;//IP
-		//				Send_Data->data[1].ID = p_data[1]->ID;
+			//				Send_Data->data[1].ip = p_data[1]->ip;//IP
+			//				Send_Data->data[1].ID = p_data[1]->ID;
 
-		//				//データを送信
-		//				NetWorkSend(p2_NetHandle, Send_Data, sizeof(SendData));
-		//			}
-		//		}
-		//	}
+			//				//データを送信
+			//				NetWorkSend(p2_NetHandle, Send_Data, sizeof(SendData));
+			//			}
+			//		}
+			//	}
 		}
 	);
 
@@ -446,25 +447,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 
 
-	}
-	int Mouse = GetMouseInput();
 
-	if (Mouse & MOUSE_INPUT_LEFT)
-	{
-		p_data[0]->flag[0] = true;
-	}
+		int Mouse = GetMouseInput();
+
+		if (Mouse & MOUSE_INPUT_RIGHT)
+		{
+			p_data[0]->flag[0] = true;
+		}
 
 		if (GameStart_flag == false)
 		{
 			for (int i = INITIALIZE; i < MAX; i++) {
 				//準備確認
-				if (NetHandle[i] != -1) {
+				if (NetHandle[i] != 0) {
 					if (p_data[i]->flag[2] == false)
 					{
 						break;
 					}
+					player_check = true;
 				}
-				if (i == MAX - 1)
+				if (i == MAX - 1&&player_check==true)
 				{
 					//プレイヤーの順番を決める処理
 					/*
@@ -476,7 +478,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
-		if (GameStart_flag==true)
+		if (GameStart_flag == true)
 		{
 			//ターン移行処理
 			/*if ()
@@ -496,12 +498,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					Send_Data->data[i].flag[0] = p_data[i]->flag[0];
 				}
 			}
-		
-	
+
+		}
 
 		for (int i = 0; i < MAX; i++) {
 			//データを送信する
-			if (NetHandle[i]!=-1){
+			if (NetHandle[i] != -1) {
 				NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
 			}
 
@@ -523,7 +525,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		);
 		for (int i = 0; i < MAX; i++)
 		{
-			DrawFormatString(0, i*16+32, GetColor(255, 255, 255),
+			DrawFormatString(0, i * 16 + 32, GetColor(255, 255, 255),
 				"スレッド1 IP:%d.%d.%d.%d name=%8s 枚数=%d:y=%f",
 				p_data[i]->ip.d1,
 				p_data[i]->ip.d2,
@@ -534,7 +536,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				p_data[i]->flag
 			);
 		}
-		
+
 		ScreenFlip();//画面更新
 		if ((ProcessMessage() == -1))break;
 	}

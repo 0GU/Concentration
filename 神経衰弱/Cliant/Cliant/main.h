@@ -73,21 +73,21 @@ struct Card {
 
 //順位確認
 struct Rank {
-	char name[MAX][8] = { { "null" },{ "null" },{ "null" },{ "null" } };//名前
+	char name[MAX][NAME_INPUT_MAX] = { { "null" },{ "null" },{ "null" },{ "null" } };//名前
 	int count[MAX] = { 0,0,0,0 };
 	int ranking[MAX] = { 0,0,0,0 };
 };
 
 //全員の名前
 struct ALL_Name {
-	char p_name[MAX][8] = { { "null" },{ "null" },{ "null" },{ "null" } };//名前
+	char p_name[MAX][NAME_INPUT_MAX] = { { "null" },{ "null" },{ "null" },{ "null" } };//名前
 };
 
 //プレイヤークラス
 class Data {
 private:
 public:
-	char name[8] = { "null" };//名前
+	char name[NAME_INPUT_MAX] = { "null" };//名前
 	int count = INITIALIZE;
 	int ID{ -1 };//オブジェクト識別用
 	IPDATA ip{ 0,0,0,0 };//IPアドレス保存用
@@ -134,7 +134,7 @@ class RecvData {
 private:
 public:
 	Data data[MAX];
-	Trump trump[52];
+	Trump trump[TRUMP_MAX];
 };
 
 class SendMyData {

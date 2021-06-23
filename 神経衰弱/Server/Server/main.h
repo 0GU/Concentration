@@ -15,12 +15,12 @@
 #define OFFSET_Y 100//画像表示位置補正　縦
 #define TRUMP_WIDTH 120//トランプの画像サイズ　横
 #define TRUMP_HEIGHT 170//トランプの画像サイズ　縦
-#define HORIZONTAL_SPACING 20+TRUMP_WIDTH//トランプの横の間隔
-#define VERTICAL_SPACING 30+TRUMP_HEIGHT//トランプの縦の間隔 
+#define HORIZONTAL_SPACING (20+TRUMP_WIDTH)//トランプの横の間隔
+#define VERTICAL_SPACING (30+TRUMP_HEIGHT)//トランプの縦の間隔 
 
 #define SUIT 4//トランプのスートの数
 #define TRUMP_NUMBER 13//トランプの数字の数
-#define MAX_TRUMP SUIT*TRUMP_NUMBER//トランプの最大枚数
+#define MAX_TRUMP (SUIT*TRUMP_NUMBER)//トランプの最大枚数
 
 
 	
@@ -102,12 +102,21 @@ public:
 	void Rank_Data_Init();
 };
 
-//送受信データ用のクラス
+//送信データ用のクラス
 class SendData {
 private:
 public:
 	Data data[MAX];
 	Trump trump[52];
+};
+
+//受信データ用のクラス
+class RecvData {
+private:
+public:
+	Point pos;
+	bool Ready_flag;
+	bool turn_flag;
 };
 
 ////送受信トランプ用のクラス

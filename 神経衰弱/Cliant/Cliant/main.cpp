@@ -185,6 +185,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
 			}
 		}
+
 		else {
 			//データ受信してない場合
 			//マウスをクリックしているか判定
@@ -234,7 +235,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			for (int i = INITIALIZE; i < MAX; i++)
 			{
 				if (Player_ALL->data[i].ID != -1) {
-					if (Player_ALL->data[i].name == my_Data->name) {
+					if (Player_ALL->data[i].ip.d1 == my_Data->ip.d1&&
+						Player_ALL->data[i].ip.d2 == my_Data->ip.d2&&
+						Player_ALL->data[i].ip.d3 == my_Data->ip.d3&&
+						Player_ALL->data[i].ip.d4 == my_Data->ip.d4) {
 						DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(WHITE));
 					}
 					else {

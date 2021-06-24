@@ -17,10 +17,21 @@
 #define TRUMP_HEIGHT 170//トランプの画像サイズ　縦
 #define HORIZONTAL_SPACING (20+TRUMP_WIDTH)//トランプの横の間隔
 #define VERTICAL_SPACING (30+TRUMP_HEIGHT)//トランプの縦の間隔 
+#define TRUMP_ERASURE 99 //トランプ描画削除
+#define TRUMP_INIT 99 //トランプの座標の初期化(While分の終了条件に0が入る可能性があるため99)
+#define IP_POS_X 0 //IPアドレス表示位置X軸
+#define IP_POS_Y 0 //IPアドレス表示位置Y軸
+#define IP_DIS_POS_X 0 //IP表示位置X軸
+#define IP_DIS_POS_Y 16 //IP表示位置X軸
 
 #define SUIT 4//トランプのスートの数
 #define TRUMP_NUMBER 13//トランプの数字の数
 #define MAX_TRUMP (SUIT*TRUMP_NUMBER)//トランプの最大枚数
+
+#define WHITE 255, 255, 255 //文字の色：白
+#define RED 255, 0, 0 //文字の色：赤
+#define GREEN 0, 255, 0 //文字の色：緑
+#define BLUE 0, 0, 255 //文字の色：青
 
 
 	

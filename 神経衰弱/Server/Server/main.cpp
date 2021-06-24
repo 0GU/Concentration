@@ -33,14 +33,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	//プレイヤーデータ
 	Data* p_data[MAX];
-	for (int i = 0; i < MAX; i++)p_data[i] = new Data();
+	for (int i = INITIALIZE; i < MAX; i++)p_data[i] = new Data();
 
 	//トランプデータ
 	Point SetTrumpPos[MAX_TRUMP];
 	bool setposflag = false;
 	for (int i = INITIALIZE; i < MAX_TRUMP; i++)
 	{
-		SetTrumpPos[i] = { 99,99 };
+		SetTrumpPos[i] = { TRUMP_INIT,TRUMP_INIT };
 	}
 	Trump* All_trump[MAX_TRUMP];
 	for (int i = INITIALIZE; i < SUIT; i++)
@@ -85,7 +85,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	//受信用データ
 	RecvData* Recv_Data[MAX];
-	for (int i = 0; i < MAX; i++)
+	for (int i = INITIALIZE; i < MAX; i++)
 	{
 		Recv_Data[i] = new RecvData();
 	}
@@ -93,11 +93,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//ネットワーク関係
 	IPDATA IP;
 	int Port = 26;
-	int NetHandle[4] = { 0 };
+	int NetHandle[MAX] = { INITIALIZE };
 
 	//トランプチェック用変数
-	int Check_count = 0;
-	int Save_Trump[2] = { 0,0 };
+	int Check_count = INITIALIZE;
+	int Save_Trump[2] = { INITIALIZE,INITIALIZE };
 
 	//ゲーム開始用フラグ
 	bool GameStart_flag = false;
@@ -111,7 +111,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//p_data[0]
 	thread* p1 = new thread([&]()
 		{
-			IPDATA ip{ 0,0,0,0 };//IPアドレス
+			IPDATA ip{ INITIALIZE,INITIALIZE,INITIALIZE,INITIALIZE };//IPアドレス
 			int DataLength = -1;//受信データの大きさ取得用
 			int p1_NetHandle = -1;//ネットワークハンドル
 			char StrBuf[256]{ "null" };//送受信データ用
@@ -161,10 +161,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 							{
 								for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
 								{
-									if (50 + (j * 140) < Recv_Data[0]->pos.x &&
-										50 + (j * 140) + 120 > Recv_Data[0]->pos.x &&
-										100 + (i * 200) < Recv_Data[0]->pos.y &&
-										100 + (i * 200) + 170 > Recv_Data[0]->pos.y)
+									if (OFFSET_X + (j * HORIZONTAL_SPACING) < Recv_Data[0]->pos.x &&
+										OFFSET_X + (j * HORIZONTAL_SPACING) + TRUMP_WIDTH > Recv_Data[0]->pos.x &&
+										OFFSET_Y + (i * VERTICAL_SPACING) < Recv_Data[0]->pos.y &&
+										OFFSET_Y + (i * VERTICAL_SPACING) + TRUMP_HEIGHT > Recv_Data[0]->pos.y)
 									{
 										for (int k = INITIALIZE; k < MAX_TRUMP; k++)
 										{
@@ -190,8 +190,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						{
 							if (All_trump[Save_Trump[0]]->line_card.num == All_trump[Save_Trump[1]]->line_card.num)
 							{
-								All_trump[Save_Trump[0]]->ID = 99;
-								All_trump[Save_Trump[1]]->ID = 99;
+								All_trump[Save_Trump[0]]->ID = TRUMP_ERASURE;
+								All_trump[Save_Trump[1]]->ID = TRUMP_ERASURE;
 								Send_Data->data[0].count += 2;
 							}
 							else
@@ -201,7 +201,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 								p_data[0]->flag[0] = false;
 
 							}
-							Check_count = 0;
+							Check_count = INITIALIZE;
 						}
 
 					}
@@ -210,7 +210,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						//初回の接続
 						//IPと名前を登録
 						p_data[0]->ip = ip;
-						p_data[0]->ID = 0;
+						p_data[0]->ID = INITIALIZE;
 						memcpy_s(p_data[0]->name, sizeof(p_data[0]->name), StrBuf, sizeof(p_data[0]->name));
 						//送信データの更新
 						strcpy_s(Send_Data->data[0].name, sizeof(p_data[0]->name), p_data[0]->name);
@@ -501,7 +501,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		}
 
-		for (int i = 0; i < MAX; i++) {
+		for (int i = INITIALIZE; i < MAX; i++) {
 			//データを送信する
 			if (NetHandle[i] != -1) {
 				NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
@@ -515,7 +515,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 		}
 		//状況表示
-		DrawFormatString(0, 0, GetColor(255, 255, 255),
+		DrawFormatString(IP_POS_X, IP_POS_Y, GetColor(WHITE),
 			"PCのIPアドレス:%d.%d.%d.%d 接続ポート:%d",
 			IP.d1,
 			IP.d2,
@@ -523,9 +523,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			IP.d4,
 			Port
 		);
-		for (int i = 0; i < MAX; i++)
+		for (int i = INITIALIZE; i < MAX; i++)
 		{
-			DrawFormatString(0, i * 16 + 32, GetColor(255, 255, 255),
+			DrawFormatString(IP_DIS_POS_X, i * IP_DIS_POS_Y + 32, GetColor(WHITE),
 				"スレッド1 IP:%d.%d.%d.%d name=%8s 枚数=%d:y=%f",
 				p_data[i]->ip.d1,
 				p_data[i]->ip.d2,

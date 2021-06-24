@@ -252,6 +252,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		
 		Point pd{ INITIALIZE,INITIALIZE };
+
 		int Mouse = GetMouseInput();
 		GetMousePoint(&pd.x, &pd.y);
 

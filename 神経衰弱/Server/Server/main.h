@@ -33,6 +33,15 @@
 #define GREEN 0, 255, 0 //文字の色：緑
 #define BLUE 0, 0, 255 //文字の色：青
 
+//プレイヤー番号
+enum Player_num
+{
+	Player1,
+	Player2,
+	Player3,
+	Player4
+};
+
 
 	
 //IPDATA IP_set();//IP入力

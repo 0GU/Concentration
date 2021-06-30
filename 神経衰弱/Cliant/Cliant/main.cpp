@@ -101,6 +101,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	SendData* Send_Data = new SendData();
 
 	//SendTrump* Trump_ALL = new SendTrump();
+	
+	//マイナンバー
+	int Mynumber=99;
 
 	//通信関係
 	IPDATA IP;
@@ -108,6 +111,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	int NetHandel;
 	//ポート
 	int Port = 26;
+
+	//通信用のフラグ
+	bool Conect_comp_flag = false;
 	
 	//通信先のIPアドレス設定
 	IP = IP_set();
@@ -149,6 +155,37 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 			ScreenFlip();
 			WaitKey();
+			///接続用（バグってる）
+		
+			do
+			{
+				if (GetNetWorkDataLength(NetHandel) != 0) {
+					//データを受信してた場合
+					NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData)); //コピー作業
+					memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));//変換
+
+
+					for (int i = INITIALIZE; i < MAX; i++)
+					{
+						if (strcmp(Player_ALL->data[i].name, my_Data->name) == 0)
+						{
+							Mynumber = i;
+
+							if (Player_ALL->data[Mynumber].flag[2] == true)
+							{
+								Conect_comp_flag = true;
+							}
+						}
+					}
+				} 
+				else {
+					//データ受信してない場合
+					my_Data->flag[2] = true;
+					Send_Data->Ready_flag = my_Data->flag[2];
+					NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
+				}
+			} while (Conect_comp_flag==false);
+				
 			break;
 		}
 		else {
@@ -168,23 +205,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData));
 			//プレイヤー全体データの更新
 			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
-			my_Data->flag[0] = Player_ALL->data[0].flag[0];
+		
+					my_Data->flag[0] = Player_ALL->data[Mynumber].flag[0];
+				
+			
 			
 			int Mouse2 = GetMouseInput();
 			if ((MOUSE_INPUT_LEFT &Mouse2)== 0)
 			{
-				my_Data->flag[1] = Player_ALL->data[0].flag[1];
+				my_Data->flag[1] = Player_ALL->data[Mynumber].flag[1];
 			}
 		}
-		else if (my_Data->flag[2] ==false)
-		{
-			if (CheckHitKey(KEY_INPUT_S))
-			{
-				my_Data->flag[2] = true;
-				Send_Data->Ready_flag = my_Data->flag[2];
-				NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
-			}
-		}
+		
 
 		else {
 			//データ受信してない場合
@@ -235,10 +267,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			for (int i = INITIALIZE; i < MAX; i++)
 			{
 				if (Player_ALL->data[i].ID != -1) {
-					if (Player_ALL->data[i].ip.d1 == my_Data->ip.d1&&
-						Player_ALL->data[i].ip.d2 == my_Data->ip.d2&&
-						Player_ALL->data[i].ip.d3 == my_Data->ip.d3&&
-						Player_ALL->data[i].ip.d4 == my_Data->ip.d4) {
+					if (Mynumber==i) {
 						DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(WHITE));
 					}
 					else {

@@ -83,6 +83,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		Send_Data->trump[i] = *All_trump[i];
 	}
 
+	//送信用データ
+	SendRankData* Send_RankData = new SendRankData();
+	Send_RankData->Rdata.Rank_Data_Init();
+
+
 	//受信用データ
 	RecvData* Recv_Data[MAX];
 	for (int i = INITIALIZE; i < MAX; i++)
@@ -98,14 +103,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//トランプチェック用変数
 	int Check_count = INITIALIZE;
 	int Save_Trump[2] = { INITIALIZE,INITIALIZE };
+	int GetCord_num = 0;
 
-	//ゲーム開始用フラグ
+	//ゲーム開始/終了用フラグ
 	bool GameStart_flag = false;
+	bool GameSet_flag = false;
 	bool player_check = false;
 
 	//ターン処理用変数
-	int Turn_Player_num=INITIALIZE;//ターンプレイヤー識別用
-	int Join_Player_num=INITIALIZE;//参加人数保存用
+	int Turn_Player_num = INITIALIZE;//ターンプレイヤー識別用
+	int Join_Player_num = INITIALIZE;//参加人数保存用
 	///////////
 
 	//接続待機状態にする
@@ -121,7 +128,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			char StrBuf[256]{ "null" };//送受信データ用
 
 			//初回接続処理
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
 			{
 				p1_NetHandle = GetNewAcceptNetWork();//ネットワークハンドル取得
 				if (p1_NetHandle != -1)
@@ -132,7 +139,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 
 			//サブスレッドのメインループ
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
 			{
 				DataLength = GetNetWorkDataLength(p1_NetHandle);
 				if (DataLength != 0)
@@ -152,13 +159,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 						//受信データを変換
 						memcpy_s(Recv_Data[Player1], sizeof(RecvData), StrBuf, sizeof(RecvData));
-						
+
 						p_data[Player1]->flag[2] = Recv_Data[Player1]->Ready_flag;
-						if (p_data[Player1]->flag[2]==true)
+						if (p_data[Player1]->flag[2] == true)
 						{
 							Send_Data->data[Player1].flag[2] = true;
 						}
-					
+
 						//クリック判定
 
 						if (p_data[Player1]->flag[0] == true)
@@ -232,7 +239,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 
 			//サブスレッドのメインループ
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
 			{
 				DataLength = GetNetWorkDataLength(p2_NetHandle);
 				if (DataLength != 0)
@@ -318,7 +325,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			char StrBuf[256]{ "null" };//送受信データ用
 
 			//初回接続処理
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
 			{
 				if (NetHandle[Player2] != 0)
 				{
@@ -332,7 +339,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 
 			//サブスレッドのメインループ
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
 			{
 				DataLength = GetNetWorkDataLength(p3_NetHandle);
 				if (DataLength != 0)
@@ -417,7 +424,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			char StrBuf[256]{ "null" };//送受信データ用
 
 			//初回接続処理
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
 			{
 				if (NetHandle[Player3] != 0)
 				{
@@ -431,7 +438,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 
 			//サブスレッドのメインループ
-			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+			while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
 			{
 				DataLength = GetNetWorkDataLength(p4_NetHandle);
 				if (DataLength != 0)
@@ -505,6 +512,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
+
 	);
 
 	//メインループ(サーバー管理画面)
@@ -550,108 +558,155 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					GameStart_flag = true;
 					Turn_Player_num = Player1;
 					p_data[Turn_Player_num]->flag[0] = true;
-					
+
 				}
 			}
 		}
-		if (GameStart_flag == true)
+		if (GameSet_flag == false)
 		{
-			//ターン移行処理
-			if (p_data[Turn_Player_num]->flag[0]==false)
+			if (GameStart_flag == true)
 			{
-				Check_count = INITIALIZE;
-				Turn_Player_num += 1;
-				if (Turn_Player_num==Join_Player_num)
+				//ターン移行処理
+				if (p_data[Turn_Player_num]->flag[0] == false)
 				{
-					Turn_Player_num = Player1;
+					Check_count = INITIALIZE;
+					Turn_Player_num += 1;
+					if (Turn_Player_num == Join_Player_num)
+					{
+						Turn_Player_num = Player1;
+					}
+					p_data[Turn_Player_num]->flag[0] = true;
 				}
-				p_data[Turn_Player_num]->flag[0] = true;
-			}
-			
-			//クリックフラグをfalseにする
-			if (Send_Data->data[Turn_Player_num].flag[1] == true && Check_count != 2)
-			{
-				Send_Data->data[Turn_Player_num].flag[1] = false;
+
+				//クリックフラグをfalseにする
+				if (Send_Data->data[Turn_Player_num].flag[1] == true && Check_count != 2)
+				{
+					Send_Data->data[Turn_Player_num].flag[1] = false;
+				}
+
+				for (int i = INITIALIZE; i < MAX; i++)
+				{
+					if (NetHandle[i] != -1) {
+						Send_Data->data[i].flag[0] = p_data[i]->flag[0];
+					}
+				}
+
+
+
+				//送信データの更新
+				for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+				{
+					Send_Data->trump[i] = *All_trump[i];
+				}
 			}
 
+			for (int i = INITIALIZE; i < MAX; i++) {
+				//データを送信する
+				if (NetHandle[i] != -1) {
+					NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
+				}
+
+				//切断したプレイヤーを初期化
+				if (LostHandle == NetHandle[i]) {
+					NetHandle[i] = -1;
+					//データの初期化
+					p_data[i]->Data_Init();
+				}
+			}
+			//状況表示
+			DrawFormatString(IP_POS_X, IP_POS_Y, GetColor(WHITE),
+				"PCのIPアドレス:%d.%d.%d.%d 接続ポート:%d",
+				IP.d1,
+				IP.d2,
+				IP.d3,
+				IP.d4,
+				Port
+			);
 			for (int i = INITIALIZE; i < MAX; i++)
 			{
+				DrawFormatString(IP_DIS_POS_X, i * IP_DIS_POS_Y + 32, GetColor(WHITE),
+					"スレッド1 IP:%d.%d.%d.%d name=%8s 枚数=%d:y=%f",
+					p_data[i]->ip.d1,
+					p_data[i]->ip.d2,
+					p_data[i]->ip.d3,
+					p_data[i]->ip.d4,
+					p_data[i]->name,
+					p_data[i]->count,
+					p_data[i]->flag
+				);
+			}
+
+			if (Check_count == 2)
+			{
+				if (All_trump[Save_Trump[0]]->line_card.num == All_trump[Save_Trump[1]]->line_card.num)
+				{
+					All_trump[Save_Trump[0]]->ID = TRUMP_ERASURE;
+					All_trump[Save_Trump[1]]->ID = TRUMP_ERASURE;
+					Send_Data->data[Turn_Player_num].count += 2;
+					GetCord_num += 2;
+					Check_count = INITIALIZE;
+				}
+				else
+				{
+					All_trump[Save_Trump[0]]->FandB_flag = false;
+					All_trump[Save_Trump[1]]->FandB_flag = false;
+					p_data[Turn_Player_num]->flag[0] = false;
+
+				}
+
+				if (GetCord_num == 52)
+				{
+					GameSet_flag == true;
+					for (int i = INITIALIZE; i < MAX; i++) {
+						//終了処理
+						if (NetHandle[i] != 0) {
+							Send_Data->data[i].flag[End] = true;
+
+							NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
+
+
+						}
+					}
+
+				}
+
+				WaitTimer(1000);
+
+				//送信データの更新
+				for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+				{
+					Send_Data->trump[i] = *All_trump[i];
+				}
+			}
+		}
+		if (GameSet_flag == true)
+		{
+			for (int i = INITIALIZE; i < MAX; i++) {
+				//データを更新する
 				if (NetHandle[i] != -1) {
-					Send_Data->data[i].flag[0] = p_data[i]->flag[0];
+					Send_RankData->Rdata.allrank.count[i] = p_data[i]->count;
+					strcpy_s(Send_RankData->Rdata.allrank.name[i], sizeof(Send_RankData->Rdata.allrank.name[i]), p_data[i]->name);
+					//順位のソート
+					/*if (i>1)
+					{
+						for (int j = INITIALIZE; j < i; j++)
+						{
+							if ()
+							{
+
+							}
+						}
+					}*/
 				}
 			}
 
-		}
-
-		//送信データの更新
-		for (int i = INITIALIZE; i < MAX_TRUMP; i++)
-		{
-			Send_Data->trump[i] = *All_trump[i];
-		}
-
-		for (int i = INITIALIZE; i < MAX; i++) {
-			//データを送信する
-			if (NetHandle[i] != -1) {
-				NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
-			}
-
-			//切断したプレイヤーを初期化
-			if (LostHandle == NetHandle[i]) {
-				NetHandle[i] = -1;
-				//データの初期化
-				p_data[i]->Data_Init();
+			for (int i = INITIALIZE; i < MAX; i++) {
+				//データを送信する
+				if (NetHandle[i] != -1) {
+					NetWorkSend(NetHandle[i], Send_RankData, sizeof(SendRankData));
+				}
 			}
 		}
-		//状況表示
-		DrawFormatString(IP_POS_X, IP_POS_Y, GetColor(WHITE),
-			"PCのIPアドレス:%d.%d.%d.%d 接続ポート:%d",
-			IP.d1,
-			IP.d2,
-			IP.d3,
-			IP.d4,
-			Port
-		);
-		for (int i = INITIALIZE; i < MAX; i++)
-		{
-			DrawFormatString(IP_DIS_POS_X, i * IP_DIS_POS_Y + 32, GetColor(WHITE),
-				"スレッド1 IP:%d.%d.%d.%d name=%8s 枚数=%d:y=%f",
-				p_data[i]->ip.d1,
-				p_data[i]->ip.d2,
-				p_data[i]->ip.d3,
-				p_data[i]->ip.d4,
-				p_data[i]->name,
-				p_data[i]->count,
-				p_data[i]->flag
-			);
-		}
-
-		if (Check_count == 2)
-		{
-			if (All_trump[Save_Trump[0]]->line_card.num == All_trump[Save_Trump[1]]->line_card.num)
-			{
-				All_trump[Save_Trump[0]]->ID = TRUMP_ERASURE;
-				All_trump[Save_Trump[1]]->ID = TRUMP_ERASURE;
-				Send_Data->data[Turn_Player_num].count += 2;
-				Check_count = INITIALIZE;
-			}
-			else
-			{
-				All_trump[Save_Trump[0]]->FandB_flag = false;
-				All_trump[Save_Trump[1]]->FandB_flag = false;
-				p_data[Turn_Player_num]->flag[0] = false;
-
-			}
-			
-
-			WaitTimer(1000);
-
-			//送信データの更新
-			for (int i = INITIALIZE; i < MAX_TRUMP; i++)
-			{
-				Send_Data->trump[i] = *All_trump[i];
-			}
-		}
-
 		ScreenFlip();//画面更新
 		if ((ProcessMessage() == -1))break;
 	}

@@ -8,7 +8,7 @@
 #define INITIALIZE 0//初期化
 
 #define MAX 4//接続数
-#define FLAG_MAX 3//フラグの数
+#define FLAG_MAX 4//フラグの数
 #define WIDTH 800//windowsサイズ　横
 #define HEIGHT 600//windowaサイズ　縦
 #define OFFSET_X 50//画像表示位置補正　横
@@ -42,6 +42,13 @@ enum Player_num
 	Player4
 };
 
+enum Flag_num
+{
+	Turn,
+	Click,
+	Ready,
+	End
+};
 
 	
 //IPDATA IP_set();//IP入力
@@ -86,7 +93,7 @@ public:
 	int count=0;
 	int ID{ -1 };//オブジェクト識別用
 	IPDATA ip{ 0,0,0,0 };//IPアドレス保存用
-	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用
+	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用 3・・・ゲーム終了用
 	
 	//コンストラクタ
 	Data();

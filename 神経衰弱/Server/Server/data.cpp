@@ -71,4 +71,4 @@ void Trump::Card_Init()
 	line_card.suit = INITIALIZE;
 
 	FandB_flag = false;
-}
+}	

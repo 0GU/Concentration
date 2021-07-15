@@ -264,21 +264,41 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 
+			int playernamenum = 0;
+
 			for (int i = INITIALIZE; i < MAX; i++)
 			{
 				if (Player_ALL->data[i].ID != -1) {
 					if (Mynumber==i) {
 						DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(WHITE));
+						DrawFormatStringF(1000, 900, GetColor(WHITE), "%dñá" , Player_ALL->data[i].count);
 					}
-					else {
-						DrawStringF(0, 0, Player_ALL->data[i].name, GetColor(WHITE));
 
+					else {
+						switch (playernamenum)
+						{
+						case 0:
+							DrawStringF(300, 35, Player_ALL->data[i].name, GetColor(RED));
+							DrawFormatStringF(400, 35, GetColor(WHITE), "%dñá", Player_ALL->data[i].count);
+							break;
+
+						case 1:
+							DrawStringF(950, 35, Player_ALL->data[i].name, GetColor(BLUE));
+							DrawFormatStringF(1000, 35, GetColor(WHITE), "%dñá", Player_ALL->data[i].count);
+							break;
+
+						case 2:
+							DrawStringF(1600, 35, Player_ALL->data[i].name, GetColor(GREEN));
+							DrawFormatStringF(1700, 35, GetColor(WHITE), "%dñá", Player_ALL->data[i].count);
+							break;
+							
+						default:
+							break;
+						}
 					}
 				}
 			}
 		}
-		
-
 		
 		Point pd{ INITIALIZE,INITIALIZE };
 
@@ -286,8 +306,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		GetMousePoint(&pd.x, &pd.y);
 
 		DrawFormatString(0, 0, GetColor(WHITE), "x=%d : y=%d", pd.x, pd.y);
-
-
 
 		ScreenFlip(); //âÊñ çXêV
 

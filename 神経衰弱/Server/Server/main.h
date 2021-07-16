@@ -4,7 +4,9 @@
 #include <string.h>
 #include <string>
 #include <sstream>
-
+#include <thread>
+#include <iostream>
+#include "sort.h"
 #define INITIALIZE 0//初期化
 
 #define MAX 4//接続数
@@ -93,7 +95,7 @@ public:
 	int count=0;
 	int ID{ -1 };//オブジェクト識別用
 	IPDATA ip{ 0,0,0,0 };//IPアドレス保存用
-	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用 3・・・ゲーム終了用
+	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用 
 	
 	//コンストラクタ
 	Data();
@@ -130,11 +132,23 @@ public:
 };
 
 //送信データ用のクラス
-class SendData {
+class SendSetData {
 private:
 public:
 	Data data[MAX];
 	Trump trump[52];
+	bool end_flag=false;
+};
+
+class SendMainData {
+private:
+public:
+	Data data[MAX];
+	int Reverse[2];
+	bool Reverse_flag=false;
+	bool back_flag=false;
+	bool erase_flag=false;
+	bool end_flag = false;
 };
 
 //受信データ用のクラス

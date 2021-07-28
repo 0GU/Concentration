@@ -3,7 +3,8 @@
 //Dxライブラリ使用
 #pragma once
 #include "main.h"
-
+#include <thread>
+#include <iostream>
 using namespace std;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
@@ -75,31 +76,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 	}
 
-	//登録送信用データ
-	SendSetData* Send_Set_Data = new SendSetData();
+	//送信用データ
+	SendData* Send_Data = new SendData();
 	for (int i = INITIALIZE; i < MAX_TRUMP; i++)
 	{
-		Send_Set_Data->trump[i] = *All_trump[i];
+		Send_Data->trump[i] = *All_trump[i];
 	}
-	//メイン送信用データ
-	SendMainData* Send_Main_Data = new SendMainData();
-	for (int i = 0; i < MAX; i++)
-	{
-		Send_Main_Data->data[i].Data_Init();
-	}
-	
 
-	//ランキング送信用データ
+	//送信用データ
 	SendRankData* Send_RankData = new SendRankData();
 	Send_RankData->Rdata.Rank_Data_Init();
-	//順位ソート用の配列
-	int RankSort[4];
-	//初期化
-	for (int i = INITIALIZE; i < 4; i++)
-	{
-			RankSort[i] = -1;
-		
-	}
 
 
 	//受信用データ
@@ -177,12 +163,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player1]->flag[2] = Recv_Data[Player1]->Ready_flag;
 						if (p_data[Player1]->flag[2] == true)
 						{
-							Send_Main_Data->data[Player1].flag[2] = true;
+							Send_Data->data[Player1].flag[2] = true;
 						}
 
 						//クリック判定
 
-						if (p_data[Player1]->flag[0] == true&& Send_Main_Data->Reverse_flag == false)
+						if (p_data[Player1]->flag[0] == true)
 						{
 							for (int i = INITIALIZE; i < SUIT; i++)
 							{
@@ -198,9 +184,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
-												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
 											}
@@ -218,14 +201,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player1]->ID = INITIALIZE;
 						memcpy_s(p_data[Player1]->name, sizeof(p_data[Player1]->name), StrBuf, sizeof(p_data[Player1]->name));
 						//送信データの更新
-						strcpy_s(Send_Set_Data->data[Player1].name, sizeof(p_data[Player1]->name), p_data[Player1]->name);
+						strcpy_s(Send_Data->data[Player1].name, sizeof(p_data[Player1]->name), p_data[Player1]->name);
 
-						Send_Set_Data->data[Player1].ip = p_data[Player1]->ip;//IP
-						Send_Set_Data->data[Player1].ID = p_data[Player1]->ID;
-						Send_Set_Data->data[Player1].flag[0] = p_data[Player1]->flag[0];
+						Send_Data->data[Player1].ip = p_data[Player1]->ip;//IP
+						Send_Data->data[Player1].ID = p_data[Player1]->ID;
+						Send_Data->data[Player1].flag[0] = p_data[Player1]->flag[0];
 
 						//データを送信
-						NetWorkSend(p1_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
+						NetWorkSend(p1_NetHandle, Send_Data, sizeof(SendData));
 					}
 				}
 			}
@@ -280,11 +263,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player2]->flag[2] = Recv_Data[Player2]->Ready_flag;
 						if (p_data[Player2]->flag[2] == true)
 						{
-							Send_Main_Data->data[Player2].flag[2] = true;
+							Send_Data->data[Player2].flag[2] = true;
 						}
 						//クリック判定
 
-						if (p_data[Player2]->flag[0] == true&&Send_Main_Data->Reverse_flag == false)
+						if (p_data[Player2]->flag[0] == true)
 						{
 							for (int i = INITIALIZE; i < SUIT; i++)
 							{
@@ -300,9 +283,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
-												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
 											}
@@ -320,14 +300,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player2]->ID = INITIALIZE;
 						memcpy_s(p_data[Player2]->name, sizeof(p_data[Player2]->name), StrBuf, sizeof(p_data[Player2]->name));
 						//送信データの更新
-						strcpy_s(Send_Set_Data->data[Player2].name, sizeof(p_data[Player2]->name), p_data[Player2]->name);
+						strcpy_s(Send_Data->data[Player2].name, sizeof(p_data[Player2]->name), p_data[Player2]->name);
 
-						Send_Set_Data->data[Player2].ip = p_data[Player2]->ip;//IP
-						Send_Set_Data->data[Player2].ID = p_data[Player2]->ID;
-						Send_Set_Data->data[Player2].flag[0] = p_data[Player2]->flag[0];
+						Send_Data->data[Player2].ip = p_data[Player2]->ip;//IP
+						Send_Data->data[Player2].ID = p_data[Player2]->ID;
+						Send_Data->data[Player2].flag[0] = p_data[Player2]->flag[0];
 
 						//データを送信
-						NetWorkSend(p2_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
+						NetWorkSend(p2_NetHandle, Send_Data, sizeof(SendData));
 					}
 				}
 			}
@@ -383,11 +363,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player3]->flag[2] = Recv_Data[Player3]->Ready_flag;
 						if (p_data[Player3]->flag[2] == true)
 						{
-							Send_Main_Data->data[Player3].flag[2] = true;
+							Send_Data->data[Player3].flag[2] = true;
 						}
 						//クリック判定
 
-						if (p_data[Player3]->flag[0] == true&& Send_Main_Data->Reverse_flag == false)
+						if (p_data[Player3]->flag[0] == true)
 						{
 							for (int i = INITIALIZE; i < SUIT; i++)
 							{
@@ -403,9 +383,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
-												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
 											}
@@ -423,14 +400,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player3]->ID = INITIALIZE;
 						memcpy_s(p_data[Player3]->name, sizeof(p_data[Player3]->name), StrBuf, sizeof(p_data[Player3]->name));
 						//送信データの更新
-						strcpy_s(Send_Set_Data->data[Player3].name, sizeof(p_data[Player3]->name), p_data[Player3]->name);
+						strcpy_s(Send_Data->data[Player3].name, sizeof(p_data[Player3]->name), p_data[Player3]->name);
 
-						Send_Set_Data->data[Player3].ip = p_data[Player3]->ip;//IP
-						Send_Set_Data->data[Player3].ID = p_data[Player3]->ID;
-						Send_Set_Data->data[Player3].flag[0] = p_data[Player3]->flag[0];
+						Send_Data->data[Player3].ip = p_data[Player3]->ip;//IP
+						Send_Data->data[Player3].ID = p_data[Player3]->ID;
+						Send_Data->data[Player3].flag[0] = p_data[Player3]->flag[0];
 
 						//データを送信
-						NetWorkSend(p3_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
+						NetWorkSend(p3_NetHandle, Send_Data, sizeof(SendData));
 					}
 				}
 			}
@@ -485,11 +462,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player4]->flag[2] = Recv_Data[Player4]->Ready_flag;
 						if (p_data[Player4]->flag[2] == true)
 						{
-							Send_Main_Data->data[Player4].flag[2] = true;
+							Send_Data->data[Player4].flag[2] = true;
 						}
 						//クリック判定
 
-						if (p_data[Player4]->flag[0] == true && Send_Main_Data->Reverse_flag == false)
+						if (p_data[Player4]->flag[0] == true)
 						{
 							for (int i = INITIALIZE; i < SUIT; i++)
 							{
@@ -505,9 +482,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
-												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
 											}
@@ -526,14 +500,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player4]->ID = INITIALIZE;
 						memcpy_s(p_data[Player4]->name, sizeof(p_data[Player4]->name), StrBuf, sizeof(p_data[Player4]->name));
 						//送信データの更新
-						strcpy_s(Send_Set_Data->data[Player4].name, sizeof(p_data[Player4]->name), p_data[Player4]->name);
+						strcpy_s(Send_Data->data[Player4].name, sizeof(p_data[Player4]->name), p_data[Player4]->name);
 
-						Send_Set_Data->data[Player4].ip = p_data[Player4]->ip;//IP
-						Send_Set_Data->data[Player4].ID = p_data[Player4]->ID;
-						Send_Set_Data->data[Player4].flag[0] = p_data[Player4]->flag[0];
+						Send_Data->data[Player4].ip = p_data[Player4]->ip;//IP
+						Send_Data->data[Player4].ID = p_data[Player4]->ID;
+						Send_Data->data[Player4].flag[0] = p_data[Player4]->flag[0];
 
 						//データを送信
-						NetWorkSend(p4_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
+						NetWorkSend(p4_NetHandle, Send_Data, sizeof(SendData));
 					}
 				}
 			}
@@ -605,31 +579,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 
 				//クリックフラグをfalseにする
-				if (Send_Main_Data->data[Turn_Player_num].flag[1] == true && Check_count != 2)
+				if (Send_Data->data[Turn_Player_num].flag[1] == true && Check_count != 2)
 				{
-					Send_Main_Data->data[Turn_Player_num].flag[1] = false;
+					Send_Data->data[Turn_Player_num].flag[1] = false;
 				}
 
 				for (int i = INITIALIZE; i < MAX; i++)
 				{
 					if (NetHandle[i] != -1) {
-						Send_Main_Data->data[i].flag[0] = p_data[i]->flag[0];
+						Send_Data->data[i].flag[0] = p_data[i]->flag[0];
 					}
 				}
 
 
 
-				////送信データの更新
-				//for (int i = INITIALIZE; i < MAX_TRUMP; i++)
-				//{
-				//	Send_Main_Data->trump[i] = *All_trump[i];
-				//}
+				//送信データの更新
+				for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+				{
+					Send_Data->trump[i] = *All_trump[i];
+				}
 			}
 
 			for (int i = INITIALIZE; i < MAX; i++) {
 				//データを送信する
 				if (NetHandle[i] != -1) {
-					NetWorkSend(NetHandle[i], Send_Main_Data, sizeof(Send_Main_Data));
+					NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
 				}
 
 				//切断したプレイヤーを初期化
@@ -658,9 +632,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					p_data[i]->ip.d3,
 					p_data[i]->ip.d4,
 					p_data[i]->name,
-					p_data[i]->count
-
-					);
+					p_data[i]->count,
+					
+				);
 			}
 
 			if (Check_count == 2)
@@ -669,7 +643,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				{
 					All_trump[Save_Trump[0]]->ID = TRUMP_ERASURE;
 					All_trump[Save_Trump[1]]->ID = TRUMP_ERASURE;
-					Send_Main_Data->data[Turn_Player_num].count += 2;
+					Send_Data->data[Turn_Player_num].count += 2;
 					GetCord_num += 2;
 					Check_count = INITIALIZE;
 				}
@@ -684,11 +658,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				if (GetCord_num == 52)
 				{
 					GameSet_flag == true;
-					Send_Main_Data->end_flag = true;
 					for (int i = INITIALIZE; i < MAX; i++) {
 						//終了処理
 						if (NetHandle[i] != 0) {
-							NetWorkSend(NetHandle[i], Send_Main_Data, sizeof(Send_Main_Data));
+							Send_Data->data[i].flag[End] = true;
+
+							NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
+
 
 						}
 					}
@@ -697,38 +673,33 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 				WaitTimer(1000);
 
-				////送信データの更新
-				//for (int i = INITIALIZE; i < MAX_TRUMP; i++)
-				//{
-				//	Send_Main_Data->trump[i] = *All_trump[i];
-				//}
+				//送信データの更新
+				for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+				{
+					Send_Data->trump[i] = *All_trump[i];
+				}
 			}
 		}
 		if (GameSet_flag == true)
 		{
-			//データを更新する
 			for (int i = INITIALIZE; i < MAX; i++) {
+				//データを更新する
 				if (NetHandle[i] != -1) {
 					Send_RankData->Rdata.allrank.count[i] = p_data[i]->count;
-					RankSort[i]= p_data[i]->count;
 					strcpy_s(Send_RankData->Rdata.allrank.name[i], sizeof(Send_RankData->Rdata.allrank.name[i]), p_data[i]->name);
-					
-				}
-			}
-			Shaker_Sort(RankSort);
-
-			for (int i = INITIALIZE; i < MAX; i++) {
-				if (NetHandle[i] != -1) {
-					for (int j = 0; j < 4; j++)
+					//順位のソート
+					/*if (i>1)
 					{
-						if (Send_RankData->Rdata.allrank.count[i]==RankSort[j])
+						for (int j = INITIALIZE; j < i; j++)
 						{
-							Send_RankData->Rdata.allrank.ranking[i] = j+1;
+							if ()
+							{
+
+							}
 						}
-					}
+					}*/
 				}
 			}
-		
 
 			for (int i = INITIALIZE; i < MAX; i++) {
 				//データを送信する

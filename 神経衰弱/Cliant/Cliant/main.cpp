@@ -100,7 +100,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//送信データ用のクラス
 	SendData* Send_Data = new SendData();
 
-	RecvRankData* Rank_Data = new RecvRankData();
+	//SendTrump* Trump_ALL = new SendTrump();
 	
 	//マイナンバー
 	int Mynumber=99;
@@ -197,7 +197,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	}
 
 	//メインループ
-	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0&&Player_ALL->end_flag==false) {
+	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
 		ClearDrawScreen();//画面をクリア
 
 		if (GetNetWorkDataLength(NetHandel) != 0) {
@@ -312,59 +312,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		//例外処理発生でループを抜ける
 		if (ProcessMessage() == -1)break;
 	}
-
-	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 ) {
-
-		ClearDrawScreen();//画面をクリア
-
-		if (GetNetWorkDataLength(NetHandel) != 0) {
-			//データを受信してた場合
-			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvRankData));
-			//プレイヤー全体データの更新
-			memcpy_s(Rank_Data, sizeof(RecvRankData), StrBuf, sizeof(RecvRankData));
-
-		}
-
-		for (int  i = 0; i < 4; i++)
-		{
-			switch (Rank_Data->Rdata.allrank.ranking[i])
-			{
-			case 1:
-				SetFontSize(128);
-				DrawStringF(300, 35, Player_ALL->data[i].name, GetColor(RED));
-				DrawFormatStringF(200, 100, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚", Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i], Rank_Data->Rdata.allrank.count[i]);
-				break;
-
-			case 2:
-				SetFontSize(64);
-				DrawStringF(950, 35, Player_ALL->data[i].name, GetColor(BLUE));
-				DrawFormatStringF(264,300 , GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
-				break;
-
-			case 3:
-				SetFontSize(32);
-				DrawStringF(1600, 35, Player_ALL->data[i].name, GetColor(GREEN));
-				DrawFormatStringF(296, 450, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
-				break;
-			case 4:
-				SetFontSize(16);
-				DrawStringF(1600, 35, Player_ALL->data[i].name, GetColor(GREEN));
-				DrawFormatStringF(312, 550, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
-				break;
-
-			default:
-				break;
-			}
-		}
-
-
-
-		ScreenFlip(); //画面更新
-
-	//例外処理発生でループを抜ける
-		if (ProcessMessage() == -1)break;
-	}
-
 
 	DxLib_End(); //Dxライブラリの開放
 	return 0;

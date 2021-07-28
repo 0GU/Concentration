@@ -92,21 +92,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	
 	//送受信データ処理用
-	char StrBuf[2000] = { "null" };//256バイトまで
+	char StrBuf[1400] = { "null" };//256バイトまで
 
 	//全てのプレイヤーデータ
-	RecvSetData* Player_Set_ALL = new RecvSetData();
+	RecvData* Player_ALL = new RecvData();
 
-	RecvMainData* Player_Main_ALL = new RecvMainData();
-
-	RecvRankData* Player_Rank_ALL = new RecvRankData();
-
-	Data* p_data[MAX];
-
-	bool End_flag = false;
-
-	for (int i = INITIALIZE; i < MAX; i++)p_data[i] = new Data();
-	Trump* All_trump[TRUMP_MAX];//トランプ用配列
 	//送信データ用のクラス
 	SendData* Send_Data = new SendData();
 
@@ -158,8 +148,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 			//受信したデータを変換
 			//受信データをメモリからStrBufにコピーして、SendDataに変換
-			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvSetData)); //コピー作業
-			memcpy_s(Player_Set_ALL, sizeof(RecvSetData), StrBuf, sizeof(RecvSetData));//変換
+			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData)); //コピー作業
+			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));//変換
 
 			DrawString(CONNECTION_CMP_POS_X, CONNECTION_CMP_POS_Y, "接続完了。何かキーを押してください。", GetColor(WHITE));
 
@@ -171,17 +161,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			{
 				if (GetNetWorkDataLength(NetHandel) != 0) {
 					//データを受信してた場合
-					NetWorkRecv(NetHandel, StrBuf, sizeof(RecvSetData)); //コピー作業
-					memcpy_s(Player_Set_ALL, sizeof(RecvSetData), StrBuf, sizeof(RecvSetData));//変換
+					NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData)); //コピー作業
+					memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));//変換
 
 
 					for (int i = INITIALIZE; i < MAX; i++)
 					{
-						if (strcmp(Player_Set_ALL->data[i].name, my_Data->name) == 0)
+						if (strcmp(Player_ALL->data[i].name, my_Data->name) == 0)
 						{
 							Mynumber = i;
 
-							if (Player_Set_ALL->data[Mynumber].flag[2] == true)
+							if (Player_ALL->data[Mynumber].flag[2] == true)
 							{
 								Conect_comp_flag = true;
 							}
@@ -196,17 +186,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			} while (Conect_comp_flag==false);
 				
-			//データの登録
-			for (int i = INITIALIZE; i < TRUMP_MAX; i++)
-			{
-				*All_trump[i]=Player_Set_ALL->trump[i];
-			}
-			for (int j = INITIALIZE; j < MAX; j++)
-			{
-				*p_data[j] = Player_Set_ALL->data[j];
-			}			
-
-
 			break;
 		}
 		else {
@@ -218,54 +197,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	}
 
 	//メインループ
-	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0&&End_flag==false) {
+	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0&&Player_ALL->end_flag==false) {
 		ClearDrawScreen();//画面をクリア
 
 		if (GetNetWorkDataLength(NetHandel) != 0) {
 			//データを受信してた場合
-			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvMainData));
+			NetWorkRecv(NetHandel, StrBuf, sizeof(RecvData));
 			//プレイヤー全体データの更新
-			memcpy_s(Player_Main_ALL, sizeof(RecvMainData), StrBuf, sizeof(RecvMainData));
-
-			my_Data->flag[0] = Player_Main_ALL->data[Mynumber].flag[0];
-
-			//トランプデータの更新
-			if (Player_Main_ALL->Reverse_flag == true)
-			{
-				for (int k = INITIALIZE; k < TRUMP_MAX; k++)
-				{
-					if (All_trump[k]->line_card.x == Player_Main_ALL->Reverse.x && All_trump[k]->line_card.y == Player_Main_ALL->Reverse.y)
-					{
-						All_trump[k]->FandB_flag = true;
-					}
-				}
-			}
-			else if(Player_Main_ALL->back_flag==true)
-			{
-				for (int k = INITIALIZE; k < TRUMP_MAX; k++)
-				{
-					if (All_trump[k]->FandB_flag==true)
-					{
-						All_trump[k]->FandB_flag = false;
-					}
-				}
-			}
-			else if (Player_Main_ALL->erase_flag==true)
-			{
-				for (int k = INITIALIZE; k < TRUMP_MAX; k++)
-				{
-					if (All_trump[k]->FandB_flag == true)
-					{
-						All_trump[k]->ID = 99;
-					}
-				}
-			}
-
-			/*int Mouse2 = GetMouseInput();
+			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
+		
+					my_Data->flag[0] = Player_ALL->data[Mynumber].flag[0];
+				
+			
+			
+			int Mouse2 = GetMouseInput();
 			if ((MOUSE_INPUT_LEFT &Mouse2)== 0)
 			{
-				my_Data->flag[1] = Player_Main_ALL->data[Mynumber].flag[1];
-			}*/
+				my_Data->flag[1] = Player_ALL->data[Mynumber].flag[1];
+			}
 		}
 		
 
@@ -294,21 +243,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		{
 			for (int i = INITIALIZE; i < TRUMP_MAX; i++)
 			{
-				if (All_trump[i]->ID == 10)
+				if (Player_ALL->trump[i].ID == 10)
 				{
 					//トランプカード描画
-					if (All_trump[i]->FandB_flag == true)
+					if (Player_ALL->trump[i].FandB_flag == true)
 					{
-						DrawGraphF(OFFSET_X + (All_trump[i]->line_card.x * HORIZONTAL_SPACING),
-							OFFSET_Y + (All_trump[i]->line_card.y * VERTICAL_SPACING),
-							img[All_trump[i]->line_card.suit][All_trump[i]->line_card.num],
+						DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
+							OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
+							img[Player_ALL->trump[i].line_card.suit][Player_ALL->trump[i].line_card.num],
 							true
 						);
 					}
-					else if (All_trump[i]->FandB_flag == false)
+					else if (Player_ALL->trump[i].FandB_flag == false)
 					{
-						DrawGraphF(OFFSET_X + (All_trump[i]->line_card.x * HORIZONTAL_SPACING),
-							OFFSET_Y + (All_trump[i]->line_card.y * VERTICAL_SPACING),
+						DrawGraphF(OFFSET_X + (Player_ALL->trump[i].line_card.x * HORIZONTAL_SPACING),
+							OFFSET_Y + (Player_ALL->trump[i].line_card.y * VERTICAL_SPACING),
 							backimg, true
 						);
 					}
@@ -319,28 +268,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 			for (int i = INITIALIZE; i < MAX; i++)
 			{
-				if (Player_Main_ALL->data[i].ID != -1) {
+				if (Player_ALL->data[i].ID != -1) {
 					if (Mynumber==i) {
-						DrawStringF(950, 900, Player_Main_ALL->data[i].name, GetColor(WHITE));
-						DrawFormatStringF(1000, 900, GetColor(WHITE), "%d枚" , Player_Main_ALL->data[i].count);
+						DrawStringF(950, 900, Player_ALL->data[i].name, GetColor(WHITE));
+						DrawFormatStringF(1000, 900, GetColor(WHITE), "%d枚" , Player_ALL->data[i].count);
 					}
 
 					else {
 						switch (playernamenum)
 						{
 						case 0:
-							DrawStringF(300, 35, Player_Main_ALL->data[i].name, GetColor(RED));
-							DrawFormatStringF(400, 35, GetColor(WHITE), "%d枚", Player_Main_ALL->data[i].count);
+							DrawStringF(300, 35, Player_ALL->data[i].name, GetColor(RED));
+							DrawFormatStringF(400, 35, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
 							break;
 
 						case 1:
-							DrawStringF(950, 35, Player_Main_ALL->data[i].name, GetColor(BLUE));
-							DrawFormatStringF(1000, 35, GetColor(WHITE), "%d枚", Player_Main_ALL->data[i].count);
+							DrawStringF(950, 35, Player_ALL->data[i].name, GetColor(BLUE));
+							DrawFormatStringF(1000, 35, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
 							break;
 
 						case 2:
-							DrawStringF(1600, 35, Player_Main_ALL->data[i].name, GetColor(GREEN));
-							DrawFormatStringF(1700, 35, GetColor(WHITE), "%d枚", Player_Main_ALL->data[i].count);
+							DrawStringF(1600, 35, Player_ALL->data[i].name, GetColor(GREEN));
+							DrawFormatStringF(1700, 35, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
 							break;
 							
 						default:
@@ -382,33 +331,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			{
 			case 1:
 				SetFontSize(128);
-				DrawStringF(300, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(RED));
-				DrawFormatStringF(200, 100, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
+				DrawStringF(300, 35, Player_ALL->data[i].name, GetColor(RED));
+				DrawFormatStringF(200, 100, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚", Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i], Rank_Data->Rdata.allrank.count[i]);
 				break;
 
 			case 2:
 				SetFontSize(64);
-				DrawStringF(950, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(BLUE));
-				DrawFormatStringF(264,300 , GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
+				DrawStringF(950, 35, Player_ALL->data[i].name, GetColor(BLUE));
+				DrawFormatStringF(264,300 , GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
 				break;
 
 			case 3:
 				SetFontSize(32);
-				DrawStringF(1600, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(GREEN));
-				DrawFormatStringF(296, 450, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
+				DrawStringF(1600, 35, Player_ALL->data[i].name, GetColor(GREEN));
+				DrawFormatStringF(296, 450, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
 				break;
 			case 4:
 				SetFontSize(16);
-				DrawStringF(1600, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(GREEN));
-				DrawFormatStringF(312, 550, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
+				DrawStringF(1600, 35, Player_ALL->data[i].name, GetColor(GREEN));
+				DrawFormatStringF(312, 550, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
 				break;
 
 			default:

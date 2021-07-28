@@ -136,7 +136,7 @@ class SendSetData {
 private:
 public:
 	Data data[MAX];
-	Trump trump[MAX_TRUMP];
+	Trump trump[52];
 	bool end_flag=false;
 };
 
@@ -144,7 +144,7 @@ class SendMainData {
 private:
 public:
 	Data data[MAX];
-	Point Reverse;
+	int Reverse[2];
 	bool Reverse_flag=false;
 	bool back_flag=false;
 	bool erase_flag=false;

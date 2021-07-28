@@ -624,16 +624,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			);
 			for (int i = INITIALIZE; i < MAX; i++)
 			{
-
 				DrawFormatString(IP_DIS_POS_X, i * IP_DIS_POS_Y + 32, GetColor(WHITE),
-					"スレッド1 IP:%d.%d.%d.%d name=%8s 枚数=%d",
+					"スレッド1 IP:%d.%d.%d.%d name=%8s 枚数=%d:y=%f",
 					p_data[i]->ip.d1,
 					p_data[i]->ip.d2,
 					p_data[i]->ip.d3,
 					p_data[i]->ip.d4,
 					p_data[i]->name,
 					p_data[i]->count,
-					
+					p_data[i]->flag
 				);
 			}
 

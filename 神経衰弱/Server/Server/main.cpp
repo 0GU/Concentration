@@ -35,13 +35,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	for (int i = INITIALIZE; i < MAX; i++)p_data[i] = new Data();
 
 	//トランプデータ
-	Point SetTrumpPos[MAX_TRUMP];
-	bool setposflag = false;
+	Point SetTrumpPos[MAX_TRUMP];////セットされている座標確認用配列
+	bool setposflag = false;//再設定用フラグ
+	//初期化
 	for (int i = INITIALIZE; i < MAX_TRUMP; i++)
 	{
 		SetTrumpPos[i] = { TRUMP_INIT,TRUMP_INIT };
 	}
-	Trump* All_trump[MAX_TRUMP];
+
+	Trump* All_trump[MAX_TRUMP];//トランプ用配列
+	//数字とスートの設定
 	for (int i = INITIALIZE; i < SUIT; i++)
 	{
 		for (int j = INITIALIZE; j < TRUMP_NUMBER; j++)
@@ -58,20 +61,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		{
 			do
 			{
-				setposflag = false;
-				All_trump[(i * TRUMP_NUMBER) + j]->line_card.x = GetRand(12);
-				All_trump[(i * TRUMP_NUMBER) + j]->line_card.y = GetRand(3);
+				setposflag = false;//再設定用フラグをfalseにする
+				All_trump[(i * TRUMP_NUMBER) + j]->line_card.x = GetRand(12);//x座標の決定
+				All_trump[(i * TRUMP_NUMBER) + j]->line_card.y = GetRand(3);//y座標の決定
 				for (int k = INITIALIZE; k < (i * TRUMP_NUMBER) + j; k++)
 				{
+					//決定した座標に他のカードが既にセットされている場合、再設定用フラグをtrueにする
 					if (SetTrumpPos[k].x == All_trump[(i * TRUMP_NUMBER) + j]->line_card.x &&
 						SetTrumpPos[k].y == All_trump[(i * TRUMP_NUMBER) + j]->line_card.y)
 					{
-						setposflag = true;
+						setposflag = true; //再設定用フラグをtrueにする
 					}
 				}
-			} while ((i * TRUMP_NUMBER) + j != 0 && setposflag == true);
-			SetTrumpPos[(i * TRUMP_NUMBER) + j].x = All_trump[(i * TRUMP_NUMBER) + j]->line_card.x;
-			SetTrumpPos[(i * TRUMP_NUMBER) + j].y = All_trump[(i * TRUMP_NUMBER) + j]->line_card.y;
+			} while (/*(i * TRUMP_NUMBER) + j != 0 &&*/ setposflag == true);
+			SetTrumpPos[(i * TRUMP_NUMBER) + j].x = All_trump[(i * TRUMP_NUMBER) + j]->line_card.x;//セットされている座標確認用配列にx座標を保存する
+			SetTrumpPos[(i * TRUMP_NUMBER) + j].y = All_trump[(i * TRUMP_NUMBER) + j]->line_card.y;//セットされている座標確認用配列にy座標を保存する
 		}
 	}
 
@@ -98,7 +102,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	for (int i = INITIALIZE; i < 4; i++)
 	{
 			RankSort[i] = -1;
-		
 	}
 
 
@@ -198,8 +201,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
+												Send_Main_Data->Reverse.x = j;
+												Send_Main_Data->Reverse.y = i;
 												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
@@ -217,13 +220,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player1]->ip = ip;
 						p_data[Player1]->ID = INITIALIZE;
 						memcpy_s(p_data[Player1]->name, sizeof(p_data[Player1]->name), StrBuf, sizeof(p_data[Player1]->name));
-						//送信データの更新
+						//初回の接続用送信データの更新
 						strcpy_s(Send_Set_Data->data[Player1].name, sizeof(p_data[Player1]->name), p_data[Player1]->name);
 
 						Send_Set_Data->data[Player1].ip = p_data[Player1]->ip;//IP
 						Send_Set_Data->data[Player1].ID = p_data[Player1]->ID;
 						Send_Set_Data->data[Player1].flag[0] = p_data[Player1]->flag[0];
+						//二回目以降の送信データの更新
+						strcpy_s(Send_Set_Data->data[Player1].name, sizeof(p_data[Player1]->name), p_data[Player1]->name);
 
+						Send_Main_Data->data[Player1].ip = p_data[Player1]->ip;//IP
+						Send_Main_Data->data[Player1].ID = p_data[Player1]->ID;
+						Send_Main_Data->data[Player1].flag[0] = p_data[Player1]->flag[0];
 						//データを送信
 						NetWorkSend(p1_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
 					}
@@ -300,8 +308,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
+												Send_Main_Data->Reverse.x= j;
+												Send_Main_Data->Reverse.y = i;
 												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
@@ -319,12 +327,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player2]->ip = ip;
 						p_data[Player2]->ID = INITIALIZE;
 						memcpy_s(p_data[Player2]->name, sizeof(p_data[Player2]->name), StrBuf, sizeof(p_data[Player2]->name));
-						//送信データの更新
+						//初回の接続用送信データの更新
 						strcpy_s(Send_Set_Data->data[Player2].name, sizeof(p_data[Player2]->name), p_data[Player2]->name);
 
 						Send_Set_Data->data[Player2].ip = p_data[Player2]->ip;//IP
 						Send_Set_Data->data[Player2].ID = p_data[Player2]->ID;
 						Send_Set_Data->data[Player2].flag[0] = p_data[Player2]->flag[0];
+
+						//二回目以降の送信データの更新
+						strcpy_s(Send_Main_Data->data[Player2].name, sizeof(p_data[Player2]->name), p_data[Player2]->name);
+
+						Send_Main_Data->data[Player2].ip = p_data[Player2]->ip;//IP
+						Send_Main_Data->data[Player2].ID = p_data[Player2]->ID;
+						Send_Main_Data->data[Player2].flag[0] = p_data[Player2]->flag[0];
 
 						//データを送信
 						NetWorkSend(p2_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
@@ -403,8 +418,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
+												Send_Main_Data->Reverse.x = j;
+												Send_Main_Data->Reverse.y = i;
 												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
@@ -422,12 +437,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player3]->ip = ip;
 						p_data[Player3]->ID = INITIALIZE;
 						memcpy_s(p_data[Player3]->name, sizeof(p_data[Player3]->name), StrBuf, sizeof(p_data[Player3]->name));
-						//送信データの更新
+						//初回の接続用送信データの更新
 						strcpy_s(Send_Set_Data->data[Player3].name, sizeof(p_data[Player3]->name), p_data[Player3]->name);
 
 						Send_Set_Data->data[Player3].ip = p_data[Player3]->ip;//IP
 						Send_Set_Data->data[Player3].ID = p_data[Player3]->ID;
 						Send_Set_Data->data[Player3].flag[0] = p_data[Player3]->flag[0];
+
+						//二回目以降の送信データの更新
+						strcpy_s(Send_Main_Data->data[Player3].name, sizeof(p_data[Player3]->name), p_data[Player3]->name);
+
+						Send_Main_Data->data[Player3].ip = p_data[Player3]->ip;//IP
+						Send_Main_Data->data[Player3].ID = p_data[Player3]->ID;
+						Send_Main_Data->data[Player3].flag[0] = p_data[Player3]->flag[0];
 
 						//データを送信
 						NetWorkSend(p3_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
@@ -505,8 +527,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 											if (All_trump[k]->line_card.x == j && All_trump[k]->line_card.y == i && All_trump[k]->ID == 10 && All_trump[k]->FandB_flag == false)
 											{
 												All_trump[k]->FandB_flag = true;
-												Send_Main_Data->Reverse[0] = j;
-												Send_Main_Data->Reverse[1] = i;
+												Send_Main_Data->Reverse.x = j;
+												Send_Main_Data->Reverse.y = i;
 												Send_Main_Data->Reverse_flag = true;
 												Save_Trump[Check_count] = k;
 												Check_count += 1;
@@ -525,12 +547,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						p_data[Player4]->ip = ip;
 						p_data[Player4]->ID = INITIALIZE;
 						memcpy_s(p_data[Player4]->name, sizeof(p_data[Player4]->name), StrBuf, sizeof(p_data[Player4]->name));
-						//送信データの更新
+						//初回の接続用送信データの更新
 						strcpy_s(Send_Set_Data->data[Player4].name, sizeof(p_data[Player4]->name), p_data[Player4]->name);
 
 						Send_Set_Data->data[Player4].ip = p_data[Player4]->ip;//IP
 						Send_Set_Data->data[Player4].ID = p_data[Player4]->ID;
 						Send_Set_Data->data[Player4].flag[0] = p_data[Player4]->flag[0];
+
+						//二回目以降の送信データの更新
+						strcpy_s(Send_Main_Data->data[Player4].name, sizeof(p_data[Player4]->name), p_data[Player4]->name);
+
+						Send_Main_Data->data[Player4].ip = p_data[Player4]->ip;//IP
+						Send_Main_Data->data[Player4].ID = p_data[Player4]->ID;
+						Send_Main_Data->data[Player4].flag[0] = p_data[Player4]->flag[0];
 
 						//データを送信
 						NetWorkSend(p4_NetHandle, Send_Set_Data, sizeof(Send_Set_Data));
@@ -553,14 +582,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 
 
-
-		int Mouse = GetMouseInput();
+		//テスト用
+		/*int Mouse = GetMouseInput();
 
 		if (Mouse & MOUSE_INPUT_RIGHT)
 		{
 			p_data[0]->flag[0] = true;
-		}
-
+		}*/
+		//ゲーム開始用のデータのセット
 		if (GameStart_flag == false)
 		{
 			for (int i = INITIALIZE; i < MAX; i++) {
@@ -588,6 +617,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
+		//ゲーム中の処理
 		if (GameSet_flag == false)
 		{
 			if (GameStart_flag == true)
@@ -603,19 +633,29 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					}
 					p_data[Turn_Player_num]->flag[0] = true;
 				}
-
-				//クリックフラグをfalseにする
-				if (Send_Main_Data->data[Turn_Player_num].flag[1] == true && Check_count != 2)
-				{
-					Send_Main_Data->data[Turn_Player_num].flag[1] = false;
-				}
-
+				//ターンフラグの更新
 				for (int i = INITIALIZE; i < MAX; i++)
 				{
 					if (NetHandle[i] != -1) {
 						Send_Main_Data->data[i].flag[0] = p_data[i]->flag[0];
 					}
 				}
+
+				//クリックフラグをfalseにする
+				if (Send_Main_Data->data[Turn_Player_num].flag[1] == true && Check_count != 2)
+				{
+					Send_Main_Data->data[Turn_Player_num].flag[1] = false;
+					//クリックフラグを更新したらデータを送る
+					for (int i = INITIALIZE; i < MAX; i++) {
+						//データを送信する
+						if (NetHandle[i] != -1) {
+							NetWorkSend(NetHandle[i], Send_RankData, sizeof(SendRankData));
+						}
+					}
+
+				}
+
+			
 
 
 
@@ -626,19 +666,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				//}
 			}
 
-			for (int i = INITIALIZE; i < MAX; i++) {
-				//データを送信する
-				if (NetHandle[i] != -1) {
-					NetWorkSend(NetHandle[i], Send_Main_Data, sizeof(Send_Main_Data));
-				}
-
-				//切断したプレイヤーを初期化
-				if (LostHandle == NetHandle[i]) {
-					NetHandle[i] = -1;
-					//データの初期化
-					p_data[i]->Data_Init();
-				}
-			}
+			
 			//状況表示
 			DrawFormatString(IP_POS_X, IP_POS_Y, GetColor(WHITE),
 				"PCのIPアドレス:%d.%d.%d.%d 接続ポート:%d",
@@ -665,6 +693,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 			if (Check_count == 2)
 			{
+				for (int i = INITIALIZE; i < MAX; i++) {
+					//データを送信する
+					if (NetHandle[i] != -1) {
+						NetWorkSend(NetHandle[i], Send_Main_Data, sizeof(Send_Main_Data));
+					}
+				}
+
 				if (All_trump[Save_Trump[0]]->line_card.num == All_trump[Save_Trump[1]]->line_card.num)
 				{
 					All_trump[Save_Trump[0]]->ID = TRUMP_ERASURE;
@@ -672,14 +707,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					Send_Main_Data->data[Turn_Player_num].count += 2;
 					GetCord_num += 2;
 					Check_count = INITIALIZE;
+					Send_Main_Data->erase_flag = true;
+					
 				}
 				else
 				{
 					All_trump[Save_Trump[0]]->FandB_flag = false;
 					All_trump[Save_Trump[1]]->FandB_flag = false;
 					p_data[Turn_Player_num]->flag[0] = false;
+					Send_Main_Data->back_flag = true;
 
 				}
+
+				Send_Main_Data->Reverse_flag = false;
 
 				if (GetCord_num == 52)
 				{
@@ -696,12 +736,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 
 				WaitTimer(1000);
+				for (int i = INITIALIZE; i < MAX; i++) {
+					//データを送信する
+					if (NetHandle[i] != -1) {
+						NetWorkSend(NetHandle[i], Send_Main_Data, sizeof(Send_Main_Data));
+					}
+				}
 
 				////送信データの更新
 				//for (int i = INITIALIZE; i < MAX_TRUMP; i++)
 				//{
 				//	Send_Main_Data->trump[i] = *All_trump[i];
 				//}
+						//切断したプレイヤーを初期化
+				for (int i = 0; i < MAX; i++)
+				{
+					if (LostHandle == NetHandle[i]) {
+						NetHandle[i] = -1;
+						//データの初期化
+						p_data[i]->Data_Init();
+					}
+				}
 			}
 		}
 		if (GameSet_flag == true)

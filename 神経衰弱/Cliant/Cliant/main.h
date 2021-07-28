@@ -130,12 +130,23 @@ public:
 
 
 //送受信データ用のクラス
-class RecvData {
+class RecvSetData {
 private:
 public:
 	Data data[MAX];
 	Trump trump[TRUMP_MAX];
 	bool end_flag =false;
+};
+
+class RecvMainData {
+private:
+public:
+	Data data[MAX];
+	Point Reverse;
+	bool Reverse_flag = false;
+	bool back_flag = false;
+	bool erase_flag = false;
+	bool end_flag = false;
 };
 
 class SendData {
@@ -146,11 +157,6 @@ public:
 	bool turn_flag;
 };
 
-class SendMyData {
-private:
-public:
-	Data data;
-};
 
 ////送受信トランプ用のクラス
 //class SendTrump {

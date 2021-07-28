@@ -183,6 +183,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					my_Data->flag[2] = true;
 					Send_Data->Ready_flag = my_Data->flag[2];
 					NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
+					WaitTimer(1000);
 				}
 			} while (Conect_comp_flag==false);
 				

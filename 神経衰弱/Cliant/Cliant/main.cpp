@@ -297,7 +297,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 
 			//ÉâÉìÉLÉìÉOèáà ï\é¶
+			/*
+			Rank_Data rankdata;
+
+			if (GetNetWorkDataLength(NetHandel) != 0) {
+				NetWorkRecv(NetHandel, StrBuf, sizeof(Rank_Data));
+				memcpy_s(&rankdata, sizeof(Rank_Data), StrBuf, sizeof(Rank_Data));
+
+				for (int i = INITIALIZE; i < MAX; i++) {
+					DrawFormatStringF(950, i*30, GetColor(WHITE), "%dñá" ,rankdata.allrank.count[i]);
+					//DrawFormatStringF(1000, 900, GetColor(WHITE), "%dñá", Player_ALL->data[i].count);
+				}
+			}*/
 		}
+
+		
+
 
 		Point pd{ INITIALIZE,INITIALIZE };
 

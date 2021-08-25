@@ -675,17 +675,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				if (NetHandle[i] != -1) {
 					Send_RankData->Rdata.allrank.count[i] = p_data[i]->count;
 					strcpy_s(Send_RankData->Rdata.allrank.name[i], sizeof(Send_RankData->Rdata.allrank.name[i]), p_data[i]->name);
-					//順位のソート
-					/*if (i>1)
-					{
-						for (int j = INITIALIZE; j < i; j++)
-						{
-						
-						}
-					}
-					*/
 				}
 			}
+
+			//allrankのcountの配列をソートしたもの
+			/*
+			for (int i = INITIALIZE; i < MAX; i++) {
+
+				for (int j = MAX; j > i; j--) {
+		
+					if (Send_RankData->Rdata.allrank.count[j] < Send_RankData->Rdata.allrank.count[j - 1])
+					{
+						int counttmp = Send_RankData->Rdata.allrank.count[j];
+
+						Send_RankData->Rdata.allrank.count[j] = Send_RankData->Rdata.allrank.count[j - 1];
+
+						Send_RankData->Rdata.allrank.count[j - 1] = counttmp;
+					}
+				}
+			}
+			*/
 
 			for (int i = INITIALIZE; i < MAX; i++) {
 				//データを送信する

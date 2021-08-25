@@ -1,2 +1,3 @@
 ﻿  main.cpp
+D:\git\Concentration\神経衰弱\Cliant\Cliant\main.cpp(308,30): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Cliant.vcxproj -> D:\git\Concentration\神経衰弱\Cliant\x64\Debug\Cliant.exe

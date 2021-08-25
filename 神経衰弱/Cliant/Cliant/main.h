@@ -44,6 +44,8 @@
 #define IP_KEY_INPUT_MIN_NUM 0            //IP入力文字最小文字数
 #define IP_KEY_INPUT_ANSWER_POS_X 16      //IP入力文字確認文字表示位置X軸
 #define IP_KEY_INPUT_ANSWER_POS_Y 64      //IP入力文字確認文字表示位置Y軸
+#define RANK_DIS_POS_X 1000 //ランキング表示X座標
+#define RANK_DIS_POS_Y 100 //ランキング表示Y座標
 
 #define SUIT 4                            //トランプのスートの数
 #define TRUMP_NUMBER 13                   //トランプの数字の数
@@ -106,7 +108,7 @@ private:
 public:
 	Card line_card ;
 	int ID{ 10 }; //オブジェクト識別用
-	bool FandB_flag = false;
+	bool FandB_flag = false; //裏表フラグ
 
 	//コンストラクタ
 	Trump();
@@ -114,7 +116,6 @@ public:
 	//初期化メソッド
 	void Card_Init();
 };
-
 
 //ランキングクラス
 class Rank_Data {
@@ -127,7 +128,6 @@ public:
 	//初期化用メソッド
 	void Rank_Data_Init();
 };
-
 
 //送受信データ用のクラス
 class RecvData {

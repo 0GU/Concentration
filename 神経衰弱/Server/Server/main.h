@@ -23,7 +23,10 @@
 #define IP_POS_Y 0 //IPアドレス表示位置Y軸
 #define IP_DIS_POS_X 0 //IP表示位置X軸
 #define IP_DIS_POS_Y 16 //IP表示位置X軸
+#define RANK_DIS_POS_X 1000 //ランキング表示X座標
+#define RANK_DIS_POS_Y 100 //ランキング表示Y座標
 
+#define TRUMP_MAX 52 //トランプの最大枚数
 #define SUIT 4//トランプのスートの数
 #define TRUMP_NUMBER 13//トランプの数字の数
 #define MAX_TRUMP (SUIT*TRUMP_NUMBER)//トランプの最大枚数
@@ -134,7 +137,7 @@ class SendData {
 private:
 public:
 	Data data[MAX];
-	Trump trump[52];
+	Trump trump[TRUMP_MAX];
 };
 
 //受信データ用のクラス

@@ -88,9 +88,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	int backimg = LoadGraph("image\\トランプ素材\\RedBlue.png");
 
-
-
-	
 	//送受信データ処理用
 	char StrBuf[1400] = { "null" };//256バイトまで
 
@@ -178,6 +175,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						}
 					}
 				} 
+
 				else {
 					//データ受信してない場合
 					my_Data->flag[2] = true;
@@ -185,6 +183,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
 					WaitTimer(1000);
 				}
+
 			} while (Conect_comp_flag==false);
 				
 			break;
@@ -192,7 +191,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		else {
 			//接続中
 			DrawString(CONNECTION_POS_X, CONNECTION_POS_Y, "接続確立中・・・", GetColor(WHITE));
-			
 		}
 		ScreenFlip();
 	}
@@ -209,8 +207,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		
 					my_Data->flag[0] = Player_ALL->data[Mynumber].flag[0];
 				
-			
-			
 			int Mouse2 = GetMouseInput();
 			if ((MOUSE_INPUT_LEFT &Mouse2)== 0)
 			{
@@ -218,7 +214,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 		}
 		
-
 		else {
 			//データ受信してない場合
 			//マウスをクリックしているか判定
@@ -265,6 +260,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 
+			//プレイヤーの現在の獲得枚数表示
 			int playernamenum = 0;
 
 			for (int i = INITIALIZE; i < MAX; i++)
@@ -299,8 +295,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					}
 				}
 			}
+
+			//ランキング順位表示
+			/*
+			Rank_Data rankdata;
+
+			if (GetNetWorkDataLength(NetHandel) != 0) {
+				NetWorkRecv(NetHandel, StrBuf, sizeof(Rank_Data));
+				memcpy_s(&rankdata, sizeof(Rank_Data), StrBuf, sizeof(Rank_Data));
+
+				for (int i = INITIALIZE; i < MAX; i++) {
+					DrawFormatStringF(950, i*30, GetColor(WHITE), "%d枚" ,rankdata.allrank.count[i]);
+					//DrawFormatStringF(1000, 900, GetColor(WHITE), "%d枚", Player_ALL->data[i].count);
+				}
+			}*/
 		}
+
 		
+
+
 		Point pd{ INITIALIZE,INITIALIZE };
 
 		int Mouse = GetMouseInput();

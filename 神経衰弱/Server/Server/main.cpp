@@ -167,7 +167,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						}
 
 						//クリック判定
-
 						if (p_data[Player1]->flag[0] == true)
 						{
 							for (int i = INITIALIZE; i < SUIT; i++)
@@ -317,8 +316,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//p_data[2]
 	thread* p3 = new thread([&]()
 		{
-
-
 			IPDATA ip{ INITIALIZE,INITIALIZE,INITIALIZE,INITIALIZE };//IPアドレス
 			int DataLength = -1;//受信データの大きさ取得用
 			int p3_NetHandle = -1;//ネットワークハンドル
@@ -525,9 +522,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		//切断状況をチェック
 		int LostHandle = GetLostNetWork();
 
-
-
-
 		int Mouse = GetMouseInput();
 
 		if (Mouse & MOUSE_INPUT_RIGHT)
@@ -591,8 +585,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					}
 				}
 
-
-
 				//送信データの更新
 				for (int i = INITIALIZE; i < MAX_TRUMP; i++)
 				{
@@ -651,7 +643,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					All_trump[Save_Trump[0]]->FandB_flag = false;
 					All_trump[Save_Trump[1]]->FandB_flag = false;
 					p_data[Turn_Player_num]->flag[0] = false;
-
 				}
 
 				if (GetCord_num == 52)
@@ -663,8 +654,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 							Send_Data->data[i].flag[End] = true;
 
 							NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
-
-
 						}
 					}
 
@@ -686,19 +675,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				if (NetHandle[i] != -1) {
 					Send_RankData->Rdata.allrank.count[i] = p_data[i]->count;
 					strcpy_s(Send_RankData->Rdata.allrank.name[i], sizeof(Send_RankData->Rdata.allrank.name[i]), p_data[i]->name);
-					//順位のソート
-					/*if (i>1)
-					{
-						for (int j = INITIALIZE; j < i; j++)
-						{
-							if ()
-							{
-
-							}
-						}
-					}*/
 				}
 			}
+
+			//allrankのcountの配列をソートしたもの
+			/*
+			for (int i = INITIALIZE; i < MAX; i++) {
+
+				for (int j = MAX; j > i; j--) {
+		
+					if (Send_RankData->Rdata.allrank.count[j] < Send_RankData->Rdata.allrank.count[j - 1])
+					{
+						int counttmp = Send_RankData->Rdata.allrank.count[j];
+
+						Send_RankData->Rdata.allrank.count[j] = Send_RankData->Rdata.allrank.count[j - 1];
+
+						Send_RankData->Rdata.allrank.count[j - 1] = counttmp;
+					}
+				}
+			}
+			*/
 
 			for (int i = INITIALIZE; i < MAX; i++) {
 				//データを送信する

@@ -135,6 +135,7 @@ private:
 public:
 	Data data[MAX];
 	Trump trump[TRUMP_MAX];
+	bool End_flag;
 };
 
 class SendData {
@@ -160,7 +161,7 @@ public:
 
 
 //送受信ランキングデータ用のクラス
-class SendRankData {
+class RecvRankData {
 private:
 public:
 	Rank_Data Rdata;

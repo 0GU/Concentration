@@ -4,11 +4,12 @@
 #include <string.h>
 #include <string>
 #include <sstream>
+#include "sort.h"
 
 #define INITIALIZE 0//初期化
 
 #define MAX 4//接続数
-#define FLAG_MAX 4//フラグの数
+#define FLAG_MAX 3//フラグの数
 #define WIDTH 800//windowsサイズ　横
 #define HEIGHT 600//windowaサイズ　縦
 #define OFFSET_X 50//画像表示位置補正　横
@@ -96,7 +97,7 @@ public:
 	int count=0;
 	int ID{ -1 };//オブジェクト識別用
 	IPDATA ip{ 0,0,0,0 };//IPアドレス保存用
-	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用 3・・・ゲーム終了用
+	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用
 	
 	//コンストラクタ
 	Data();
@@ -138,6 +139,8 @@ private:
 public:
 	Data data[MAX];
 	Trump trump[TRUMP_MAX];
+	bool End_flag;
+
 };
 
 //受信データ用のクラス

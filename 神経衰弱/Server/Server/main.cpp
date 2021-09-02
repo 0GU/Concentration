@@ -82,10 +82,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	{
 		Send_Data->trump[i] = *All_trump[i];
 	}
+	Send_Data->End_flag = false;
 
-	//送信用データ
+
+	//ランキング送信用データ
 	SendRankData* Send_RankData = new SendRankData();
 	Send_RankData->Rdata.Rank_Data_Init();
+	//順位ソート用の配列
+	int RankSort[4];
+	//初期化
+	for (int i = INITIALIZE; i < 4; i++)
+	{
+		RankSort[i] = -1;
+	}
+
+
 
 
 	//受信用データ
@@ -630,6 +641,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 			if (Check_count == 2)
 			{
+				//トランプデータ更新-------------------------------------------------
+				All_trump[Save_Trump[0]]->FandB_flag = true;
+				All_trump[Save_Trump[1]]->FandB_flag = true;
+				//送信データの更新
+				for (int i = INITIALIZE; i < MAX_TRUMP; i++)
+				{
+					Send_Data->trump[i] = *All_trump[i];
+				}
+				for (int i = INITIALIZE; i < MAX; i++) {
+					//データを送信する
+					if (NetHandle[i] != -1) {
+						NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
+					}
+
+					//切断したプレイヤーを初期化
+					if (LostHandle == NetHandle[i]) {
+						NetHandle[i] = -1;
+						//データの初期化
+						p_data[i]->Data_Init();
+					}
+				}
+				//---------------------------------------------------------------
 				if (All_trump[Save_Trump[0]]->line_card.num == All_trump[Save_Trump[1]]->line_card.num)
 				{
 					All_trump[Save_Trump[0]]->ID = TRUMP_ERASURE;
@@ -647,11 +680,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 				if (GetCord_num == 52)
 				{
-					GameSet_flag == true;
+					GameSet_flag = true;
+					Send_Data->End_flag = true;
 					for (int i = INITIALIZE; i < MAX; i++) {
 						//終了処理
 						if (NetHandle[i] != 0) {
-							Send_Data->data[i].flag[End] = true;
 
 							NetWorkSend(NetHandle[i], Send_Data, sizeof(SendData));
 						}
@@ -670,31 +703,29 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 		if (GameSet_flag == true)
 		{
+			//データを更新する
 			for (int i = INITIALIZE; i < MAX; i++) {
-				//データを更新する
 				if (NetHandle[i] != -1) {
 					Send_RankData->Rdata.allrank.count[i] = p_data[i]->count;
+					RankSort[i] = p_data[i]->count;
 					strcpy_s(Send_RankData->Rdata.allrank.name[i], sizeof(Send_RankData->Rdata.allrank.name[i]), p_data[i]->name);
+
 				}
 			}
+			Shaker_Sort(RankSort);
 
-			//allrankのcountの配列をソートしたもの
-			/*
 			for (int i = INITIALIZE; i < MAX; i++) {
-
-				for (int j = MAX; j > i; j--) {
-		
-					if (Send_RankData->Rdata.allrank.count[j] < Send_RankData->Rdata.allrank.count[j - 1])
+				if (NetHandle[i] != -1) {
+					for (int j = 0; j < 4; j++)
 					{
-						int counttmp = Send_RankData->Rdata.allrank.count[j];
-
-						Send_RankData->Rdata.allrank.count[j] = Send_RankData->Rdata.allrank.count[j - 1];
-
-						Send_RankData->Rdata.allrank.count[j - 1] = counttmp;
+						if (Send_RankData->Rdata.allrank.count[i] == RankSort[j])
+						{
+							Send_RankData->Rdata.allrank.ranking[i] = j + 1;
+						}
 					}
 				}
 			}
-			*/
+
 
 			for (int i = INITIALIZE; i < MAX; i++) {
 				//データを送信する
@@ -703,6 +734,41 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
+		//if (GameSet_flag == true)
+		//{
+		//	for (int i = INITIALIZE; i < MAX; i++) {
+		//		//データを更新する
+		//		if (NetHandle[i] != -1) {
+		//			Send_RankData->Rdata.allrank.count[i] = p_data[i]->count;
+		//			strcpy_s(Send_RankData->Rdata.allrank.name[i], sizeof(Send_RankData->Rdata.allrank.name[i]), p_data[i]->name);
+		//		}
+		//	}
+
+		//	//allrankのcountの配列をソートしたもの
+		//	/*
+		//	for (int i = INITIALIZE; i < MAX; i++) {
+
+		//		for (int j = MAX; j > i; j--) {
+		//
+		//			if (Send_RankData->Rdata.allrank.count[j] < Send_RankData->Rdata.allrank.count[j - 1])
+		//			{
+		//				int counttmp = Send_RankData->Rdata.allrank.count[j];
+
+		//				Send_RankData->Rdata.allrank.count[j] = Send_RankData->Rdata.allrank.count[j - 1];
+
+		//				Send_RankData->Rdata.allrank.count[j - 1] = counttmp;
+		//			}
+		//		}
+		//	}
+		//	*/
+
+		//	for (int i = INITIALIZE; i < MAX; i++) {
+		//		//データを送信する
+		//		if (NetHandle[i] != -1) {
+		//			NetWorkSend(NetHandle[i], Send_RankData, sizeof(SendRankData));
+		//		}
+		//	}
+		//}
 		ScreenFlip();//画面更新
 		if ((ProcessMessage() == -1))break;
 	}

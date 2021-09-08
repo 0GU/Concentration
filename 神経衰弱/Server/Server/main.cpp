@@ -375,6 +375,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						}
 						//ƒNƒŠƒbƒN”»’è
 
+
 						if (p_data[Player3]->flag[0] == true)
 						{
 							for (int i = INITIALIZE; i < SUIT; i++)

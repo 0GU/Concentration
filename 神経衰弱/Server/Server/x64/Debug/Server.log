@@ -1,9 +1,1 @@
-﻿  data.cpp
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\Server\data.cpp(29,11): warning C4553: '==': 式の結果が使用されていません。'=' を意図していますか?
-  main.cpp
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\Server\main.cpp(63,61): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\Server\main.cpp(64,61): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\Server\main.cpp(74,88): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\Server\main.cpp(75,88): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-  コードを生成中...
-  Server.vcxproj -> C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\x64\Debug\Server.exe
+﻿  Server.vcxproj -> C:\Users\GA3\Desktop\Concentration\神経衰弱\Server\x64\Debug\Server.exe

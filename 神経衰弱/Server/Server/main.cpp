@@ -563,6 +563,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					}
 					GameStart_flag = true;
 					Turn_Player_num = Player1;
+
 					p_data[Turn_Player_num]->flag[0] = true;
 
 				}

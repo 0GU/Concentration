@@ -267,6 +267,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 
+			//プレイヤーの順番表示UI
+			for (int i = 0; i < 4; i++) {
+				if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[0] == true && Mynumber == i) {
+					DrawString(920, 950, "あなたの番です。", GetColor(WHITE));
+				}
+				else if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[0] == false && Mynumber == i) {
+					DrawString(850, 50, "他のプレイヤーが操作しています。", GetColor(RED));
+				}
+			}
+
 			//プレイヤーの現在の獲得枚数表示
 			int playernamenum = 0;
 
@@ -320,9 +330,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}*/
 		}
 
-		
-
-
 		Point pd{ INITIALIZE,INITIALIZE };
 
 		int Mouse = GetMouseInput();
@@ -348,7 +355,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		}
 
-		for (int i = 0; i < 4; i++)
+		for (int i = INITIALIZE; i < MAX; i++)
 		{
 			switch (Rank_Data->Rdata.allrank.ranking[i])
 			{

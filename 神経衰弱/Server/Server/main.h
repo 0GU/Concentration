@@ -37,6 +37,14 @@
 #define GREEN 0, 255, 0 //文字の色：緑
 #define BLUE 0, 0, 255 //文字の色：青
 
+#define TURN_FLAG 0 //ターン識別用
+#define CLICK_FLAG 1 //クリック判定用
+#define READY_FLAG 2 //準備確認用
+
+#define TURN_FLAG 0 //ターン識別用
+#define CLICK_FLAG 1 //クリック判定用
+#define READY_FLAG 2 //準備確認用
+
 //プレイヤー番号
 enum Player_num
 {

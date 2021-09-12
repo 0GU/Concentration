@@ -44,12 +44,16 @@
 #define IP_KEY_INPUT_MIN_NUM 0            //IP入力文字最小文字数
 #define IP_KEY_INPUT_ANSWER_POS_X 16      //IP入力文字確認文字表示位置X軸
 #define IP_KEY_INPUT_ANSWER_POS_Y 64      //IP入力文字確認文字表示位置Y軸
-#define RANK_DIS_POS_X 1000 //ランキング表示X座標
-#define RANK_DIS_POS_Y 100 //ランキング表示Y座標
+#define RANK_DIS_POS_X 1000               //ランキング表示X座標
+#define RANK_DIS_POS_Y 100                //ランキング表示Y座標
 
 #define SUIT 4                            //トランプのスートの数
 #define TRUMP_NUMBER 13                   //トランプの数字の数
 #define TRUMP_MAX (SUIT*TRUMP_NUMBER)     //トランプの合計枚数
+
+#define TURN_FLAG 0 //ターン識別用
+#define CLICK_FLAG 1 //クリック判定用
+#define READY_FLAG 2 //準備確認用
 
 IPDATA IP_set(); //IP入力
 

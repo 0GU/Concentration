@@ -167,14 +167,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					//受信データを変換
 					memcpy_s(Recv_Data[Player1], sizeof(RecvData), StrBuf, sizeof(RecvData));
 
-					p_data[Player1]->flag[2] = Recv_Data[Player1]->Ready_flag;
-					if (p_data[Player1]->flag[2] == true)
+					p_data[Player1]->flag[READY_FLAG] = Recv_Data[Player1]->Ready_flag;
+					if (p_data[Player1]->flag[READY_FLAG] == true)
 					{
-						Send_Data->data[Player1].flag[2] = true;
+						Send_Data->data[Player1].flag[READY_FLAG] = true;
 					}
 
 					//クリック判定
-					if (p_data[Player1]->flag[0] == true)
+					if (p_data[Player1]->flag[TURN_FLAG] == true)
 					{
 						for (int i = INITIALIZE; i < SUIT; i++)
 						{
@@ -211,7 +211,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 					Send_Data->data[Player1].ip = p_data[Player1]->ip;//IP
 					Send_Data->data[Player1].ID = p_data[Player1]->ID;
-					Send_Data->data[Player1].flag[0] = p_data[Player1]->flag[0];
+					Send_Data->data[Player1].flag[TURN_FLAG] = p_data[Player1]->flag[TURN_FLAG];
 
 					//データを送信
 					NetWorkSend(p1_NetHandle, Send_Data, sizeof(SendData));
@@ -264,14 +264,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					//受信データを変換
 					memcpy_s(Recv_Data[Player2], sizeof(RecvData), StrBuf, sizeof(RecvData));
 
-					p_data[Player2]->flag[2] = Recv_Data[Player2]->Ready_flag;
-					if (p_data[Player2]->flag[2] == true)
+					p_data[Player2]->flag[READY_FLAG] = Recv_Data[Player2]->Ready_flag;
+					if (p_data[Player2]->flag[READY_FLAG] == true)
 					{
-						Send_Data->data[Player2].flag[2] = true;
+						Send_Data->data[Player2].flag[READY_FLAG] = true;
 					}
 					//クリック判定
 
-					if (p_data[Player2]->flag[0] == true)
+					if (p_data[Player2]->flag[TURN_FLAG] == true)
 					{
 						for (int i = INITIALIZE; i < SUIT; i++)
 						{
@@ -308,7 +308,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 					Send_Data->data[Player2].ip = p_data[Player2]->ip;//IP
 					Send_Data->data[Player2].ID = p_data[Player2]->ID;
-					Send_Data->data[Player2].flag[0] = p_data[Player2]->flag[0];
+					Send_Data->data[Player2].flag[TURN_FLAG] = p_data[Player2]->flag[TURN_FLAG];
 
 					//データを送信
 					NetWorkSend(p2_NetHandle, Send_Data, sizeof(SendData));
@@ -360,14 +360,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					//受信データを変換
 					memcpy_s(Recv_Data[Player3], sizeof(RecvData), StrBuf, sizeof(RecvData));
 
-					p_data[Player3]->flag[2] = Recv_Data[Player3]->Ready_flag;
-					if (p_data[Player3]->flag[2] == true)
+					p_data[Player3]->flag[READY_FLAG] = Recv_Data[Player3]->Ready_flag;
+					if (p_data[Player3]->flag[READY_FLAG] == true)
 					{
-						Send_Data->data[Player3].flag[2] = true;
+						Send_Data->data[Player3].flag[READY_FLAG] = true;
 					}
 
 					//クリック判定
-					if (p_data[Player3]->flag[0] == true)
+					if (p_data[Player3]->flag[TURN_FLAG] == true)
 					{
 						for (int i = INITIALIZE; i < SUIT; i++)
 						{
@@ -404,7 +404,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 					Send_Data->data[Player3].ip = p_data[Player3]->ip;//IP
 					Send_Data->data[Player3].ID = p_data[Player3]->ID;
-					Send_Data->data[Player3].flag[0] = p_data[Player3]->flag[0];
+					Send_Data->data[Player3].flag[TURN_FLAG] = p_data[Player3]->flag[TURN_FLAG];
 
 					//データを送信
 					NetWorkSend(p3_NetHandle, Send_Data, sizeof(SendData));
@@ -457,14 +457,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					//受信データを変換
 					memcpy_s(Recv_Data[Player4], sizeof(RecvData), StrBuf, sizeof(RecvData));
 
-					p_data[Player4]->flag[2] = Recv_Data[Player4]->Ready_flag;
-					if (p_data[Player4]->flag[2] == true)
+					p_data[Player4]->flag[READY_FLAG] = Recv_Data[Player4]->Ready_flag;
+					if (p_data[Player4]->flag[READY_FLAG] == true)
 					{
-						Send_Data->data[Player4].flag[2] = true;
+						Send_Data->data[Player4].flag[READY_FLAG] = true;
 					}
 
 					//クリック判定
-					if (p_data[Player4]->flag[0] == true)
+					if (p_data[Player4]->flag[TURN_FLAG] == true)
 					{
 						for (int i = INITIALIZE; i < SUIT; i++)
 						{
@@ -502,7 +502,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 					Send_Data->data[Player4].ip = p_data[Player4]->ip;//IP
 					Send_Data->data[Player4].ID = p_data[Player4]->ID;
-					Send_Data->data[Player4].flag[0] = p_data[Player4]->flag[0];
+					Send_Data->data[Player4].flag[TURN_FLAG] = p_data[Player4]->flag[TURN_FLAG];
 
 					//データを送信
 					NetWorkSend(p4_NetHandle, Send_Data, sizeof(SendData));
@@ -525,7 +525,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		if (Mouse & MOUSE_INPUT_RIGHT)
 		{
-			p_data[0]->flag[0] = true;
+			p_data[0]->flag[TURN_FLAG] = true;
 		}
 
 		if (GameStart_flag == false)
@@ -533,7 +533,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			for (int i = INITIALIZE; i < MAX; i++) {
 				//準備確認
 				if (NetHandle[i] != 0) {
-					if (p_data[i]->flag[2] == false)
+					if (p_data[i]->flag[READY_FLAG] == false)
 					{
 						break;
 					}
@@ -551,7 +551,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					GameStart_flag = true;
 					Turn_Player_num = Player1;
 
-					p_data[Turn_Player_num]->flag[0] = true;
+					p_data[Turn_Player_num]->flag[TURN_FLAG] = true;
 
 				}
 			}
@@ -561,7 +561,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			if (GameStart_flag == true)
 			{
 				//ターン移行処理
-				if (p_data[Turn_Player_num]->flag[0] == false)
+				if (p_data[Turn_Player_num]->flag[TURN_FLAG] == false)
 				{
 					Check_count = INITIALIZE;
 					Turn_Player_num += 1;
@@ -569,7 +569,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					{
 						Turn_Player_num = Player1;
 					}
-					p_data[Turn_Player_num]->flag[0] = true;
+					p_data[Turn_Player_num]->flag[TURN_FLAG] = true;
 				}
 
 				//クリックフラグをfalseにする
@@ -581,7 +581,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				for (int i = INITIALIZE; i < MAX; i++)
 				{
 					if (NetHandle[i] != -1) {
-						Send_Data->data[i].flag[0] = p_data[i]->flag[0];
+						Send_Data->data[i].flag[TURN_FLAG] = p_data[i]->flag[TURN_FLAG];
 					}
 				}
 

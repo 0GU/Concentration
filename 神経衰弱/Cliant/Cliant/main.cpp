@@ -174,7 +174,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						{
 							Mynumber = i;
 
-							if (Player_ALL->data[Mynumber].flag[2] == true)
+							if (Player_ALL->data[Mynumber].flag[READY_FLAG] == true)
 							{
 								Conect_comp_flag = true;
 							}
@@ -184,8 +184,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 				else {
 					//データ受信してない場合
-					my_Data->flag[2] = true;
-					Send_Data->Ready_flag = my_Data->flag[2];
+					my_Data->flag[READY_FLAG] = true;
+					Send_Data->Ready_flag = my_Data->flag[READY_FLAG];
 					NetWorkSend(NetHandel, Send_Data, sizeof(SendData));
 					WaitTimer(1000);
 				}
@@ -211,12 +211,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//プレイヤー全体データの更新
 			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
 		
-			my_Data->flag[0] = Player_ALL->data[Mynumber].flag[0];
+			my_Data->flag[TURN_FLAG] = Player_ALL->data[Mynumber].flag[TURN_FLAG];
 				
 			int Mouse2 = GetMouseInput();
 			if ((MOUSE_INPUT_LEFT &Mouse2)== 0)
 			{
-				my_Data->flag[1] = Player_ALL->data[Mynumber].flag[1];
+				my_Data->flag[CLICK_FLAG] = Player_ALL->data[Mynumber].flag[CLICK_FLAG];
 			}
 			End_flag = Player_ALL->End_flag;
 		}
@@ -226,10 +226,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//マウスをクリックしているか判定
 			Point p{ INITIALIZE,INITIALIZE };
 			int Mouse = GetMouseInput();
-			if (my_Data->flag[1] == false && Mouse & MOUSE_INPUT_LEFT)
+			if (my_Data->flag[CLICK_FLAG] == false && Mouse & MOUSE_INPUT_LEFT)
 			{
-				my_Data->flag[1] = true;
-				Send_Data->turn_flag = my_Data->flag[0];
+				my_Data->flag[CLICK_FLAG] = true;
+				Send_Data->turn_flag = my_Data->flag[TURN_FLAG];
 				
 				GetMousePoint(&p.x,&p.y);
 				Send_Data->pos = p;
@@ -238,7 +238,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 
 		//描画
-		if (my_Data->flag[2] == false)
+		if (my_Data->flag[READY_FLAG] == false)
 		{
 			DrawStringF(0, 0, "待機中", GetColor(WHITE));
 		}
@@ -269,10 +269,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 			//プレイヤーの順番表示UI
 			for (int i = INITIALIZE; i < MAX; i++) {
-				if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[0] == true && Mynumber == i) {
+				if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[TURN_FLAG] == true && Mynumber == i) {
 					DrawStringF(920, 950, "あなたの番です。", GetColor(WHITE));
 				}
-				else if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[0] == false && Mynumber == i) {
+				else if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[TURN_FLAG] == false && Mynumber == i) {
 					DrawStringF(850, 55, "他のプレイヤーが操作しています。" , GetColor(RED));
 				}
 			}

@@ -94,7 +94,7 @@ class Data{
 private:
 public:
 	char name[8] = { "null" };//名前
-	int count=0;
+	int count = 0;
 	int ID{ -1 };//オブジェクト識別用
 	IPDATA ip{ 0,0,0,0 };//IPアドレス保存用
 	bool flag[FLAG_MAX] = { false,false,false };//0・・・ターン識別用　1・・・クリック用　2・・・準備確認用

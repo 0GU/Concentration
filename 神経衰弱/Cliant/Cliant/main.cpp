@@ -211,7 +211,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			//プレイヤー全体データの更新
 			memcpy_s(Player_ALL, sizeof(RecvData), StrBuf, sizeof(RecvData));
 		
-					my_Data->flag[0] = Player_ALL->data[Mynumber].flag[0];
+			my_Data->flag[0] = Player_ALL->data[Mynumber].flag[0];
 				
 			int Mouse2 = GetMouseInput();
 			if ((MOUSE_INPUT_LEFT &Mouse2)== 0)
@@ -268,17 +268,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			}
 
 			//プレイヤーの順番表示UI
-			for (int i = 0; i < 4; i++) {
+			for (int i = INITIALIZE; i < MAX; i++) {
 				if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[0] == true && Mynumber == i) {
-					DrawString(920, 950, "あなたの番です。", GetColor(WHITE));
+					DrawStringF(920, 950, "あなたの番です。", GetColor(WHITE));
 				}
 				else if (Player_ALL->data[i].ID != -1 && Player_ALL->data[i].flag[0] == false && Mynumber == i) {
-					DrawString(850, 50, "他のプレイヤーが操作しています。", GetColor(RED));
+					DrawStringF(850, 55, "他のプレイヤーが操作しています。" , GetColor(RED));
 				}
 			}
 
 			//プレイヤーの現在の獲得枚数表示
-			int playernamenum = 0;
+			int playernamenum = INITIALIZE;
 
 			for (int i = INITIALIZE; i < MAX; i++)
 			{
@@ -357,41 +357,43 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		for (int i = INITIALIZE; i < MAX; i++)
 		{
-			switch (Rank_Data->Rdata.allrank.ranking[i])
-			{
-			case 1:
-				SetFontSize(128);
-				DrawStringF(300, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(RED));
-				DrawFormatStringF(200, 100, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
-				break;
+			if (Player_ALL->data[i].ID != -1) {
+				switch (Rank_Data->Rdata.allrank.ranking[i])
+				{
+				case 1:
+					SetFontSize(128);
+					//DrawStringF(300, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(RED));
+					DrawFormatStringF(200, 100, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
+						Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
+						Rank_Data->Rdata.allrank.count[i]);
+					break;
 
-			case 2:
-				SetFontSize(64);
-				DrawStringF(950, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(BLUE));
-				DrawFormatStringF(264, 300, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
-				break;
+				case 2:
+					SetFontSize(64);
+					//DrawStringF(950, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(BLUE));
+					DrawFormatStringF(264, 300, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
+						Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
+						Rank_Data->Rdata.allrank.count[i]);
+					break;
 
-			case 3:
-				SetFontSize(32);
-				DrawStringF(1600, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(GREEN));
-				DrawFormatStringF(296, 450, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
-				break;
-			case 4:
-				SetFontSize(16);
-				DrawStringF(1600, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(GREEN));
-				DrawFormatStringF(312, 550, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
-					Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
-					Rank_Data->Rdata.allrank.count[i]);
-				break;
+				case 3:
+					SetFontSize(32);
+					//DrawStringF(1600, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(GREEN));
+					DrawFormatStringF(296, 450, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
+						Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
+						Rank_Data->Rdata.allrank.count[i]);
+					break;
+				case 4:
+					SetFontSize(16);
+					//DrawStringF(1600, 35, Player_Rank_ALL->Rdata.allrank.name[i], GetColor(GREEN));
+					DrawFormatStringF(312, 550, GetColor(WHITE), "%d位	%8s		獲得枚数：%d枚",
+						Rank_Data->Rdata.allrank.ranking[i], Rank_Data->Rdata.allrank.name[i],
+						Rank_Data->Rdata.allrank.count[i]);
+					break;
 
-			default:
-				break;
+				default:
+					break;
+				}
 			}
 		}
 

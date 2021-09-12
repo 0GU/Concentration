@@ -10,3 +10,12 @@ Server
  sort.cpp
  main.h
  sort.h
+
+山田
+Cliant
+main.cpp 描画処理(トランプの描画、UI表示)
+全ソースコードのマクロ化
+
+Sarver
+main.cpp サブスレッド
+全ソースコードマクロ化

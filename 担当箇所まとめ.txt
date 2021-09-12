@@ -1,0 +1,12 @@
+新改
+Cliant
+ data.cpp
+ main.cpp…91-408(描画処理以外)
+ main.h
+
+Server
+ data.cpp
+ main.cpp…1-130(データの初期化・登録等)　527-788(サーバーメインループ・終了処理)
+ sort.cpp
+ main.h
+ sort.h

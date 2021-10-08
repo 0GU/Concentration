@@ -118,6 +118,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	bool GameSet_flag = false;
 	bool player_check = false;
 
+	bool EndTask = false;
+
 	//ターン処理用変数
 	int Turn_Player_num = INITIALIZE;//ターンプレイヤー識別用
 	int Join_Player_num = INITIALIZE;//参加人数保存用
@@ -143,10 +145,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				NetHandle[Player1] = p1_NetHandle;
 				break;
 			}
+			if ((ProcessMessage() == -1))break;
 		}
 
 		//サブスレッドのメインループ
-		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
+		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false&&EndTask==false)
 		{
 			DataLength = GetNetWorkDataLength(p1_NetHandle);
 			if (DataLength != 0)
@@ -240,10 +243,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					break;
 				}
 			}
+			if ((ProcessMessage() == -1))break;
 		}
 
 		//サブスレッドのメインループ
-		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
+		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false && EndTask == false)
 		{
 			DataLength = GetNetWorkDataLength(p2_NetHandle);
 			if (DataLength != 0)
@@ -325,7 +329,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		char StrBuf[256]{ "null" };//送受信データ用
 
 		//初回接続処理
-		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
+		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false && EndTask == false)
 		{
 			if (NetHandle[Player2] != 0)
 			{
@@ -336,10 +340,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					break;
 				}
 			}
+			if ((ProcessMessage() == -1))break;
 		}
 
 		//サブスレッドのメインループ
-		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
+		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false && EndTask == false)
 		{
 			DataLength = GetNetWorkDataLength(p3_NetHandle);
 			if (DataLength != 0)
@@ -433,10 +438,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					break;
 				}
 			}
+			if ((ProcessMessage() == -1))break;
 		}
 
 		//サブスレッドのメインループ
-		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false)
+		while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 && GameSet_flag == false && EndTask == false)
 		{
 			DataLength = GetNetWorkDataLength(p4_NetHandle);
 			if (DataLength != 0)
@@ -768,6 +774,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		ScreenFlip();//画面更新
 		if ((ProcessMessage() == -1))break;
 	}
+	EndTask = true;
 	p1->join();
 	p2->join();
 	p3->join();
